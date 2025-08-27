@@ -30,18 +30,12 @@ class SignInScreen extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                // Logo
                 Image.asset(AppImages.logo1, width: 118, height: 32),
                 const SizedBox(height: 90),
-            
                 Text("Sign In", style: poppins29w600),
                 const SizedBox(height: 30),
-            
-                // Email Field
                 CustomTextField(hintText: "Email", controller: emailController),
                 const SizedBox(height: 16),
-            
-                // Password Field with toggle
                 CustomTextField(
                   hintText: "Password",
                   controller: passwordController,
