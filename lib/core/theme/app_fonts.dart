@@ -35,3 +35,17 @@ final TextStyle poppins29w600 = GoogleFonts.poppins(
   fontWeight: FontWeight.w600,
   color: Color(0xFF0F182E),
 );
+
+final TextStyle outfit12w400 = GoogleFonts.outfit(
+  fontSize: 12,
+  fontWeight: FontWeight.w400,
+  color: Color(0xFF848D94),
+);
+
+
+final TextStyle outfit12w4001 = GoogleFonts.outfit(
+  fontSize: 12,
+  fontWeight: FontWeight.w400,
+  color: Color(0xFF848D94),
+  decoration: TextDecoration.underline,
+);
