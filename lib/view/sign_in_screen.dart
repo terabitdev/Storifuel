@@ -83,8 +83,6 @@ class SignInScreen extends StatelessWidget {
                   ],
                 ),
                 const SizedBox(height: 20),
-            
-                // Sign In Button (reusable)
                 RoundButton(
                   text: "Sign In",
                   onPressed: () {
