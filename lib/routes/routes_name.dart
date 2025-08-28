@@ -10,4 +10,5 @@ class RoutesName {
   static const String favourite = '/favourite';
   static const String profile = '/profile';
   static const String navbar = '/navbar';
+  static const String createStory = '/create-story';
 }

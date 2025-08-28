@@ -29,6 +29,11 @@ final TextStyle outfit14w500 = GoogleFonts.outfit(
   fontWeight: FontWeight.w500,
   color: Color(0xFF2D5980),
 );
+final TextStyle outfit16w500 = GoogleFonts.outfit(
+  fontSize: 16,
+  fontWeight: FontWeight.w500,
+  color: Color(0xFF191919),
+);
 
 final TextStyle poppins29w600 = GoogleFonts.poppins(
   fontSize: 29,
@@ -98,3 +103,4 @@ final TextStyle nunito14w500 = GoogleFonts.nunito(
   fontWeight: FontWeight.w500,
   color: Color(0xFF151515),
 );
+

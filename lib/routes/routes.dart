@@ -12,8 +12,10 @@ import 'package:storifuel/view/auth/sign_in_screen.dart';
 import 'package:storifuel/view/auth/sign_up_screen.dart';
 import 'package:storifuel/view/onboarding/splash_screen.dart';
 import 'package:storifuel/view/profile/profile_screen.dart';
+import 'package:storifuel/view/story/create_story_screen.dart';
 import 'package:storifuel/view_model/Auth/auth_provider.dart';
 import 'package:storifuel/view_model/dashboard/dashboard_provider.dart';
+import 'package:storifuel/view_model/story/story_provider.dart';
 
 class Routes {
   static Route<dynamic> generateRoute(RouteSettings settings) {
@@ -25,6 +27,13 @@ class Routes {
       case RoutesName.onboarding:
         return MaterialPageRoute(
           builder: (BuildContext context) => const OnboardingScreen(),
+        );
+      case RoutesName.createStory:
+        return MaterialPageRoute(
+          builder: (BuildContext context) => ChangeNotifierProvider(
+            create: (_) => StoryProvider(),
+            child: CreateStoryScreen(),
+          ),
         );
       case RoutesName.signIn:
         return MaterialPageRoute(

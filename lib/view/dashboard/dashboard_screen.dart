@@ -3,6 +3,7 @@ import 'package:storifuel/core/constants/app_images.dart';
 import 'package:storifuel/core/theme/app_responsiveness.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:storifuel/routes/routes_name.dart';
 import 'package:storifuel/view_model/dashboard/dashboard_provider.dart';
 
 class CustomNavigationBar extends StatelessWidget {
@@ -51,29 +52,34 @@ class CustomNavigationBar extends StatelessWidget {
                     ),
                     label: '',
                   ),
-                  NavigationDestination(
+                   NavigationDestination(
                     icon: SvgPicture.asset(
                       navBarProvider.selectedIndex == 1
-                          ? AppImages.categoryColorIcon
-                          : AppImages.categoryIcon,
+                          ? AppImages.favouriteColorIcon
+                          : AppImages.favouriteIcon,
                     ),
                     label: '',
                   ),
                   NavigationDestination(
-                    icon: Container(
-                      padding: EdgeInsets.only(top: 6),
-                      decoration: BoxDecoration(
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.grey.shade300,
-                            spreadRadius: 2,
-                            blurRadius: 10,
-                          ),
-                        ],
-                        shape: BoxShape.circle,
-                      ),
-                      child: SvgPicture.asset(
-                        AppImages.addIcon,
+                    icon: GestureDetector(
+                      onTap: () {
+                        Navigator.pushNamed(context, RoutesName.createStory);
+                      },
+                      child: Container(
+                        padding: EdgeInsets.only(top: 6),
+                        decoration: BoxDecoration(
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.grey.shade300,
+                              spreadRadius: 2,
+                              blurRadius: 10,
+                            ),
+                          ],
+                          shape: BoxShape.circle,
+                        ),
+                        child: SvgPicture.asset(
+                          AppImages.addIcon,
+                        ),
                       ),
                     ),
                     label: '',
@@ -81,8 +87,8 @@ class CustomNavigationBar extends StatelessWidget {
                   NavigationDestination(
                     icon: SvgPicture.asset(
                       navBarProvider.selectedIndex == 2
-                          ? AppImages.favouriteColorIcon
-                          : AppImages.favouriteIcon,
+                          ? AppImages.categoryColorIcon
+                          : AppImages.categoryIcon,
                     ),
                     label: '',
                   ),
@@ -111,3 +117,4 @@ class CustomNavigationBar extends StatelessWidget {
     return actualIndex;
   }
 }
+

@@ -25,4 +25,8 @@ class AppImages {
   static const String nonFavIcon = 'assets/icons/Non-fav.svg';
   static const String editIcon = 'assets/icons/edit.svg';
   static const String trashIcon = 'assets/icons/trash.svg';
+  static const String deleteIcon = 'assets/icons/delete.svg';
+  static const String uploadIcon = 'assets/icons/upload.svg';
+  static const String voiceIcon = 'assets/icons/voice.svg';
+  static const String octagonPlusIcon = 'assets/icons/octagon-plus.svg';
 }

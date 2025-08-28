@@ -11,8 +11,8 @@ class NavBarProvider extends ChangeNotifier {
 
   final List<Widget> screens = [
     const HomeScreen(),
-    const CategoryScreen(),
     const FavouriteScreen(),
+    const CategoryScreen(),
     const ProfileScreen(),
   ];
 
