@@ -9,20 +9,25 @@ import 'package:storifuel/widgets/auth/custom_textfield.dart';
 import 'package:storifuel/widgets/common/auth_redirect_text.dart';
 import 'package:storifuel/widgets/common/round_button.dart';
 
-class SignInScreen extends StatelessWidget {
+class SignUpScreen extends StatefulWidget {
+  const SignUpScreen({super.key});
+
+  @override
+  State<SignUpScreen> createState() => _SignUpScreenState();
+}
+
+class _SignUpScreenState extends State<SignUpScreen> {
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
-
-  SignInScreen({super.key});
+  final TextEditingController fullNameController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
     final authProvider = context.watch<AuthProvider>();
-
-    return Scaffold(
+    return  Scaffold(
       body: SafeArea(
         child: Padding(
-          padding:  EdgeInsets.symmetric(
+          padding: EdgeInsets.symmetric(
             horizontal: 24,
             vertical: context.screenHeight * 0.03,
           ),
@@ -32,14 +37,17 @@ class SignInScreen extends StatelessWidget {
               children: [
                 Image.asset(AppImages.logo1, width: 118, height: 32),
                 const SizedBox(height: 90),
-                Text("Sign In", style: poppins29w600),
-                const SizedBox(height: 30),
-                CustomTextField(hintText: "Email", controller: emailController),
-                const SizedBox(height: 16),
+                Text("Sign Up", style: poppins29w600),
+                const SizedBox(height: 60),
+                CustomTextField(labelText: "FULL NAME", controller: fullNameController),
+                const SizedBox(height: 37),
+                CustomTextField(labelText: "EMAIL", controller: emailController),
+                const SizedBox(height: 37),
                 CustomTextField(
-                  hintText: "Password",
-                  controller: passwordController,
                   obscureText: !authProvider.isPasswordVisible,
+                  labelText: "PASSWORD",
+                  controller: passwordController,
+                  keyboardType: TextInputType.visiblePassword,
                   suffixIcon: IconButton(
                     onPressed: () {
                       authProvider.togglePasswordVisibility();
@@ -53,42 +61,19 @@ class SignInScreen extends StatelessWidget {
                     ),
                   ),
                 ),
-                const SizedBox(height: 12),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Row(
-                      children: [
-                        Checkbox(
-                          value: authProvider.rememberMe,
-                          onChanged: (val) {
-                            authProvider.toggleRememberMe(val ?? false);
-                          },
-                        ),
-                        Text("Remember Me",style: outfit12w400),
-                      ],
-                    ),
-                    TextButton(
-                      onPressed: () {
-                        Navigator.pushNamed(context, '/forgot-password');
-                      },
-                      child: Text("Forgot Password?", style: outfit12w4001),
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 20),
+                const SizedBox(height: 27),
                 RoundButton(
-                  text: "Sign In",
+                  text: "Sign Up",
                   onPressed: () {
-                    // handle login
+                    // handle sign up
                   },
                 ),
                 SizedBox(height: 190),
                 AuthRedirectText(
-                  leadingText: "No account yet? ",
-                  actionText: "Sign up now!",
+                  leadingText: "Already have an account?",
+                  actionText: "Sign in",
                   onTap: () {
-                    Navigator.pushNamed(context, '/sign-up');
+                    Navigator.pushNamed(context, '/sign-in');
                   },
                 ),
               ],

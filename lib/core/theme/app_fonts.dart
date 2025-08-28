@@ -49,3 +49,14 @@ final TextStyle outfit12w4001 = GoogleFonts.outfit(
   color: Color(0xFF848D94),
   decoration: TextDecoration.underline,
 );
+
+final TextStyle outfit14w300 = GoogleFonts.outfit(
+  fontSize: 14,
+  fontWeight: FontWeight.w300,
+  color: Color(0xFF0F182E),
+);
+final TextStyle outfit12w300 = GoogleFonts.outfit(
+  fontSize: 12,
+  fontWeight: FontWeight.w300,
+  color: Color(0xFF848D94),
+);

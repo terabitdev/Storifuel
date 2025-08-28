@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:storifuel/core/theme/app_theme.dart';
 import 'package:storifuel/routes/routes.dart';
 import 'package:storifuel/routes/routes_name.dart';
 
@@ -13,8 +14,8 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'StoriFuel',
-      theme: ThemeData(
-      ),
+      theme: AppTheme.lightTheme,
+      themeMode: ThemeMode.light,
       initialRoute: RoutesName.splash,
       onGenerateRoute: Routes.generateRoute,
     );

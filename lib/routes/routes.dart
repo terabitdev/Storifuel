@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:storifuel/routes/routes_name.dart';
+import 'package:storifuel/view/check_email_screen.dart';
+import 'package:storifuel/view/forgot_password.dart';
 import 'package:storifuel/view/onboarding_screen.dart';
 import 'package:storifuel/view/sign_in_screen.dart';
 import 'package:storifuel/view/sign_up_screen.dart';
@@ -25,10 +27,23 @@ class Routes {
             child: SignInScreen(),
           ),
         );
-
-      case RoutesName.signUp:
+        case RoutesName.signUp:
         return MaterialPageRoute(
-          builder: (BuildContext context) => const SignUpScreen(),
+          builder: (BuildContext context) => ChangeNotifierProvider(
+            create: (_) => AuthProvider(),
+            child: SignUpScreen(),
+          ),
+        );
+        case RoutesName.forgotPassword:
+        return MaterialPageRoute(
+          builder: (BuildContext context) => ChangeNotifierProvider(
+            create: (_) => AuthProvider(),
+            child: ForgotPasswordScreen(),
+          ),
+        );
+        case RoutesName.checkEmail:
+        return MaterialPageRoute(
+          builder: (BuildContext context) => const CheckEmailScreen(),
         );
       default:
         return MaterialPageRoute(

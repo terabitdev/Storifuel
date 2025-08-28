@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:storifuel/core/constants/app_colors.dart';
 import 'package:storifuel/core/constants/app_images.dart';
 
@@ -21,13 +20,15 @@ class CustomAppBar extends StatelessWidget {
             alignment: Alignment.centerLeft,
             child: GestureDetector(
               onTap: () => Navigator.pop(context),
-              child: SvgPicture.asset(
+              child: Image.asset(
                 AppImages.backIcon,
+                height: 29,
+                width: 29,
               ),
             ),
           ),
           Image.asset(
-            AppImages.logo,
+            AppImages.logo1,
             height: 32,
             width: 118,
           ),
