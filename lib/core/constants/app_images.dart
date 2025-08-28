@@ -16,4 +16,9 @@ class AppImages {
   static const String profileIcon = 'assets/icons/profile.svg';
   static const String profileColorIcon = 'assets/icons/profile-fill.svg';
   static const String addIcon = 'assets/icons/Add.svg';
+  static const String plusIcon = 'assets/icons/plus.svg';
+  static const String searchIcon = 'assets/icons/search.svg';
+  static const String filterIcon = 'assets/icons/filter.svg';
+  static const String clockIcon = 'assets/icons/clock.svg';
+  static const String story = 'assets/images/story1.png';
 }

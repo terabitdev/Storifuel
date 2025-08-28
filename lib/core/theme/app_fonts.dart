@@ -32,7 +32,12 @@ final TextStyle outfit14w500 = GoogleFonts.outfit(
 
 final TextStyle poppins29w600 = GoogleFonts.poppins(
   fontSize: 29,
-  fontWeight: FontWeight.w600,
+  fontWeight: FontWeight.w400,
+  color: Color(0xFF0F182E),
+);
+final TextStyle poppins22w600 = GoogleFonts.poppins(
+  fontSize: 22,
+  fontWeight: FontWeight.w400,
   color: Color(0xFF0F182E),
 );
 
@@ -59,4 +64,25 @@ final TextStyle outfit12w300 = GoogleFonts.outfit(
   fontSize: 12,
   fontWeight: FontWeight.w300,
   color: Color(0xFF848D94),
+);
+
+final TextStyle poppins14w400 = GoogleFonts.poppins(
+  fontSize: 14,
+  fontWeight: FontWeight.w400,
+  color: Color(0xFF848D94),
+);
+final TextStyle poppins16w600 = GoogleFonts.poppins(
+  fontSize: 16,
+  fontWeight: FontWeight.w600,
+  color: Color(0xFF0F182E),
+);
+final TextStyle poppins12w400 = GoogleFonts.poppins(
+  fontSize: 12,
+  fontWeight: FontWeight.w400,
+  color: Color(0xFF848D94),
+);
+final TextStyle poppins18w600 = GoogleFonts.poppins(
+  fontSize: 18,
+  fontWeight: FontWeight.w600,
+  color: Color(0xFF0F182E),
 );

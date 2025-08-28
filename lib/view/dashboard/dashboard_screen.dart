@@ -25,7 +25,6 @@ class CustomNavigationBar extends StatelessWidget {
                 topRight: Radius.circular(20),
               ),
               border: Border.all(color: Colors.grey.shade300, width: 1),
-              color: Colors.white,
             ),
             child: Padding(
               padding: const EdgeInsets.all(14.0),
