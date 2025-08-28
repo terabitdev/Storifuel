@@ -1,13 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:storifuel/routes/routes_name.dart';
-import 'package:storifuel/view/check_email_screen.dart';
-import 'package:storifuel/view/forgot_password.dart';
-import 'package:storifuel/view/onboarding_screen.dart';
-import 'package:storifuel/view/sign_in_screen.dart';
-import 'package:storifuel/view/sign_up_screen.dart';
-import 'package:storifuel/view/splash_screen.dart';
+import 'package:storifuel/view/auth/check_email_screen.dart';
+import 'package:storifuel/view/auth/forgot_password.dart';
+import 'package:storifuel/view/category/category_screen.dart';
+import 'package:storifuel/view/dashboard/dashboard_screen.dart';
+import 'package:storifuel/view/favourite/favourite_screen.dart';
+import 'package:storifuel/view/home/home_screen.dart';
+import 'package:storifuel/view/onboarding/onboarding_screen.dart';
+import 'package:storifuel/view/auth/sign_in_screen.dart';
+import 'package:storifuel/view/auth/sign_up_screen.dart';
+import 'package:storifuel/view/onboarding/splash_screen.dart';
+import 'package:storifuel/view/profile/profile_screen.dart';
 import 'package:storifuel/view_model/Auth/auth_provider.dart';
+import 'package:storifuel/view_model/dashboard/dashboard_provider.dart';
 
 class Routes {
   static Route<dynamic> generateRoute(RouteSettings settings) {
@@ -45,6 +51,30 @@ class Routes {
         return MaterialPageRoute(
           builder: (BuildContext context) => const CheckEmailScreen(),
         );
+        case RoutesName.navbar:
+        return MaterialPageRoute(
+          builder: (BuildContext context) => ChangeNotifierProvider(
+            create: (_) => NavBarProvider(),
+            child: CustomNavigationBar(),
+          ),
+        );
+        case RoutesName.home:
+        return MaterialPageRoute(
+          builder: (BuildContext context) => const HomeScreen(),
+        );
+      case RoutesName.category:
+        return MaterialPageRoute(
+          builder: (BuildContext context) => const CategoryScreen(),
+        );
+      case RoutesName.favourite:
+        return MaterialPageRoute(
+          builder: (BuildContext context) => const FavouriteScreen(),
+        );
+      case RoutesName.profile:
+        return MaterialPageRoute(
+          builder: (BuildContext context) => const ProfileScreen(),
+        );
+        
       default:
         return MaterialPageRoute(
           builder: (_) =>

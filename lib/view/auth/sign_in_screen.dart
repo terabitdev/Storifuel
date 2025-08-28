@@ -99,7 +99,7 @@ class SignInScreen extends StatelessWidget {
                 RoundButton(
                   text: "Sign In",
                   onPressed: () {
-                    // handle login
+                    Navigator.pushNamed(context, '/navbar');
                   },
                 ),
                 SizedBox(height: 190),

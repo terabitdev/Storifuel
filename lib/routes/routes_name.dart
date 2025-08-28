@@ -6,4 +6,8 @@ class RoutesName {
   static const String forgotPassword = '/forgot-password';
   static const String checkEmail = '/check-email';
   static const String home = '/home';
+  static const String category = '/category';
+  static const String favourite = '/favourite';
+  static const String profile = '/profile';
+  static const String navbar = '/navbar';
 }
