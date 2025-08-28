@@ -31,18 +31,44 @@ class StoryCard extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          ClipRRect(
-            borderRadius: const BorderRadius.only(
-              topLeft: Radius.circular(14),
-              topRight: Radius.circular(14),
-            ),
-            child: Image.asset(
-              image,
-              height: 160,
-              width: double.infinity,
-              fit: BoxFit.cover,
-            ),
+          // ✅ Image with Fav Icon overlay
+          Stack(
+            children: [
+              ClipRRect(
+                borderRadius: const BorderRadius.only(
+                  topLeft: Radius.circular(14),
+                  topRight: Radius.circular(14),
+                ),
+                child: Image.asset(
+                  image,
+                  height: 160,
+                  width: double.infinity,
+                  fit: BoxFit.cover,
+                ),
+              ),
+              Positioned(
+                top: 10,
+                left: 10,
+                child: Container(
+                  width: 34,
+                  height: 34,
+                  decoration: BoxDecoration(
+                    color: Colors.white.withOpacity(0.8),
+                    shape: BoxShape.circle,
+                  ),
+                  child: Center(
+                    child: SvgPicture.asset(
+                      AppImages.favIcon,
+                      height: 20,
+                      width: 20,
+                    ),
+                  ),
+                ),
+              ),
+            ],
           ),
+
+          // ✅ Text Section
           Padding(
             padding: const EdgeInsets.all(12.0),
             child: Column(
@@ -55,16 +81,14 @@ class StoryCard extends StatelessWidget {
                       child: Text(
                         title,
                         style: poppins16w600,
-                        maxLines: 2, // allow wrapping
+                        maxLines: 2,
                         overflow: TextOverflow.ellipsis,
                       ),
                     ),
                     const SizedBox(width: 8),
                     Container(
                       padding: const EdgeInsets.symmetric(
-                        horizontal: 8,
-                        vertical: 2,
-                      ),
+                          horizontal: 8, vertical: 2),
                       decoration: BoxDecoration(
                         color: Colors.green,
                         borderRadius: BorderRadius.circular(10),
@@ -88,7 +112,6 @@ class StoryCard extends StatelessWidget {
                     ),
                   ],
                 ),
-
                 const SizedBox(height: 6),
                 Text(
                   description,

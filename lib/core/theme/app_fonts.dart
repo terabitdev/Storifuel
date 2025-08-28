@@ -86,3 +86,15 @@ final TextStyle poppins18w600 = GoogleFonts.poppins(
   fontWeight: FontWeight.w600,
   color: Color(0xFF0F182E),
 );
+
+final TextStyle nunitoSans18w700 = GoogleFonts.nunitoSans(
+  fontSize: 18,
+  fontWeight: FontWeight.w700,
+  color: Color(0xFF111827),
+);
+
+final TextStyle nunito14w500 = GoogleFonts.nunito(
+  fontSize: 14,
+  fontWeight: FontWeight.w500,
+  color: Color(0xFF151515),
+);

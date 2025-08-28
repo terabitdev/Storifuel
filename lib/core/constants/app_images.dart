@@ -21,4 +21,8 @@ class AppImages {
   static const String filterIcon = 'assets/icons/filter.svg';
   static const String clockIcon = 'assets/icons/clock.svg';
   static const String story = 'assets/images/story1.png';
+  static const String favIcon = 'assets/icons/Fav.svg';
+  static const String nonFavIcon = 'assets/icons/Non-fav.svg';
+  static const String editIcon = 'assets/icons/edit.svg';
+  static const String trashIcon = 'assets/icons/trash.svg';
 }

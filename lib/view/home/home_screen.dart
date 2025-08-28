@@ -7,14 +7,37 @@ import 'package:storifuel/core/theme/app_responsiveness.dart';
 import 'package:storifuel/widgets/home/search_field.dart';
 import 'package:storifuel/widgets/home/story_card.dart';
 
-
-
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
     final TextEditingController searchController = TextEditingController();
+
+    // Mock data for now (replace with API/Firebase later)
+    final List<Map<String, String>> stories = [
+      {
+        "image": AppImages.story,
+        "title": "Bitcoin Bull Run ‘May Not Happen Until 2025",
+        "description":
+            "Bitcoin is a crypto asset that is a reference for various altcoins that have currently been launched, so its price movements are an important...",
+        "timeAgo": "3h ago"
+      },
+      {
+        "image": AppImages.story,
+        "title": "An Evening Walk Under the Gentle Rain",
+        "description":
+            "Last night, I went out for a walk while the rain gently poured down. The streets were quiet, and the sound of raindrops on the rooftops made everything feel peaceful...",
+        "timeAgo": "3h ago"
+      },
+      {
+        "image": AppImages.story,
+        "title": "My Daughter’s First Day at School",
+        "description":
+            "The day started with a mix of joy and nervousness as I held my daughter’s tiny hand and walked her into her classroom...",
+        "timeAgo": "3h ago"
+      },
+    ];
 
     return Scaffold(
       floatingActionButton: FloatingActionButton(
@@ -25,7 +48,8 @@ class HomeScreen extends StatelessWidget {
       ),
       body: SafeArea(
         child: Padding(
-          padding: EdgeInsets.symmetric(horizontal: 16, vertical: context.screenHeight * 0.02),
+          padding: EdgeInsets.symmetric(
+              horizontal: 16, vertical: context.screenHeight * 0.02),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -49,32 +73,19 @@ class HomeScreen extends StatelessWidget {
               Text("Recently", style: poppins18w600),
               const SizedBox(height: 12),
               Expanded(
-                child: ListView(
-                  children: const [
-                    StoryCard(
-                      image: AppImages.story,
-                      title: "Bitcoin Bull Run ‘May Not Happen Until 2025",
-                      description:
-                          "Bitcoin is a crypto asset that is a reference for various altcoins that have currently been launched, so its price movements are an important...",
-                      timeAgo: "3h ago",
-                    ),
-                    StoryCard(
-                      image: AppImages.story,
-                      title: "An Evening Walk Under the Gentle Rain",
-                      description:
-                          "Last night, I went out for a walk while the rain gently poured down. The streets were quiet, and the sound of raindrops on the rooftops made everything feel peaceful...",
-                      timeAgo: "3h ago",
-                    ),
-                    StoryCard(
-                      image: AppImages.story,
-                      title: "My Daughter’s First Day at School",
-                      description:
-                          "The day started with a mix of joy and nervousness as I held my daughter’s tiny hand and walked her into her classroom...",
-                      timeAgo: "3h ago",
-                    ),
-                  ],
+                child: ListView.builder(
+                  itemCount: stories.length,
+                  itemBuilder: (context, index) {
+                    final story = stories[index];
+                    return StoryCard(
+                      image: story["image"]!,
+                      title: story["title"]!,
+                      description: story["description"]!,
+                      timeAgo: story["timeAgo"]!,
+                    );
+                  },
                 ),
-              )
+              ),
             ],
           ),
         ),
