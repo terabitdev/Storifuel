@@ -25,7 +25,7 @@ class HomeScreen extends StatelessWidget {
         "title": "Bitcoin Bull Run 'May Not Happen Until 2025",
         "description":
             "Bitcoin is a crypto asset that is a reference for various altcoins that have currently been launched, so its price movements are an important...",
-        "timeAgo": "3h ago"
+        "timeAgo": "3h ago",
       },
       {
         "id": "story_2",
@@ -33,7 +33,7 @@ class HomeScreen extends StatelessWidget {
         "title": "An Evening Walk Under the Gentle Rain",
         "description":
             "Last night, I went out for a walk while the rain gently poured down. The streets were quiet, and the sound of raindrops on the rooftops made everything feel peaceful...",
-        "timeAgo": "3h ago"
+        "timeAgo": "3h ago",
       },
       {
         "id": "story_3",
@@ -41,7 +41,7 @@ class HomeScreen extends StatelessWidget {
         "title": "My Daughter's First Day at School",
         "description":
             "The day started with a mix of joy and nervousness as I held my daughter's tiny hand and walked her into her classroom...",
-        "timeAgo": "3h ago"
+        "timeAgo": "3h ago",
       },
     ];
 
@@ -55,11 +55,15 @@ class HomeScreen extends StatelessWidget {
       body: SafeArea(
         child: Padding(
           padding: EdgeInsets.symmetric(
-              horizontal: 16, vertical: context.screenHeight * 0.02),
+            horizontal: 16,
+            vertical: context.screenHeight * 0.02,
+          ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Center(child: Image.asset(AppImages.logo1, width: 118, height: 32)),
+              Center(
+                child: Image.asset(AppImages.logo1, width: 118, height: 32),
+              ),
               const SizedBox(height: 24),
               Text.rich(
                 TextSpan(
@@ -69,7 +73,7 @@ class HomeScreen extends StatelessWidget {
                     TextSpan(
                       text: "confidence with your stories",
                       style: poppins22w600.copyWith(color: Colors.black),
-                    )
+                    ),
                   ],
                 ),
               ),
@@ -139,7 +143,9 @@ class HomeScreen extends StatelessWidget {
                       Center(
                         child: Text(
                           'Filter Categories',
-                          style: nunitoSans16w700.copyWith(color: const Color(0xFF0F182E)),
+                          style: nunitoSans16w700.copyWith(
+                            color: const Color(0xFF0F182E),
+                          ),
                         ),
                       ),
                       const SizedBox(height: 20),
@@ -152,7 +158,9 @@ class HomeScreen extends StatelessWidget {
                         child: TextField(
                           controller: searchController,
                           decoration: InputDecoration(
-                            contentPadding: const EdgeInsets.symmetric(vertical: 14),
+                            contentPadding: const EdgeInsets.symmetric(
+                              vertical: 14,
+                            ),
                             border: InputBorder.none,
                             prefixIcon: Padding(
                               padding: const EdgeInsets.all(12.0),
@@ -164,15 +172,20 @@ class HomeScreen extends StatelessWidget {
                         ),
                       ),
                       const SizedBox(height: 20),
-                      ...provider.availableCategories.map((category) => _FilterCategoryRow(
-                        category: category,
-                        isSelected: provider.isCategorySelected(category),
-                        onTap: () => provider.toggleCategory(category),
-                      )),
+                      ...provider.availableCategories.map(
+                        (category) => _FilterCategoryRow(
+                          category: category,
+                          isSelected: provider.isCategorySelected(category),
+                          onTap: () => provider.toggleCategory(category),
+                        ),
+                      ),
                       const SizedBox(height: 24),
-                     RoundButton(text: 'Search', onPressed: () {
-                       Navigator.pop(context);
-                     })
+                      RoundButton(
+                        text: 'Search',
+                        onPressed: () {
+                          Navigator.pop(context);
+                        },
+                      ),
                     ],
                   ),
                 );
@@ -210,10 +223,12 @@ class _FilterCategoryRow extends StatelessWidget {
               Expanded(
                 child: Text(
                   category,
-                  style: nunitoSans16w700.copyWith(color: const Color(0xFF0F182E)),
+                  style: nunitoSans16w700.copyWith(
+                    color: const Color(0xFF0F182E),
+                  ),
                 ),
               ),
-              _FilterCheckIcon(isSelected: isSelected)
+              _FilterCheckIcon(isSelected: isSelected),
             ],
           ),
         ),
