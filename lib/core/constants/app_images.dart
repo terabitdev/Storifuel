@@ -27,7 +27,7 @@ class AppImages {
   static const String trashIcon = 'assets/icons/trash.svg';
   static const String deleteIcon = 'assets/icons/delete.svg';
   static const String uploadIcon = 'assets/icons/upload.svg';
-  static const String voiceIcon = 'assets/icons/voice.svg';
+  static const String voiceIcon = 'assets/images/voice.png';
   static const String octagonPlusIcon = 'assets/icons/octagon-plus.svg';
   static const String drawerIcon = 'assets/icons/drawer.svg';
   static const String arrowIcon = 'assets/images/arrow.png';

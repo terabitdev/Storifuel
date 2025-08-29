@@ -34,7 +34,6 @@ class ShareButton extends StatelessWidget {
               AppImages.shareIcon,
               height: 20,
               width: 20,
-              color: Colors.white,
             ),
           ],
         ),

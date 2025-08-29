@@ -29,7 +29,7 @@ class ForgotPasswordScreen extends StatelessWidget {
               const SizedBox(height: 20),
               Text('Please enter your email, we will send you',style: nunitoSans16w400),
               Text('a link to reset your password',style: nunitoSans16w400),
-              Spacer(),
+              const Spacer(),
               RoundButton(text: "Send Link", onPressed: () {
                 Navigator.pushNamed(context, '/check-email');
               }),

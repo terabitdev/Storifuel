@@ -11,10 +11,10 @@ class ProfileScreen extends StatelessWidget {
     return Scaffold(
       resizeToAvoidBottomInset: true,
       appBar: AppBar(
+        scrolledUnderElevation: 0,
         automaticallyImplyLeading: false, // removes back arrow
         elevation: 0,
         centerTitle: true,
-        backgroundColor: Colors.white,
         title: Text(
           "Edit Profile",
           style: nunitoSans18w700,
@@ -51,6 +51,7 @@ class ProfileScreen extends StatelessWidget {
               ProfileCustomTextField(label: "Email", hint: "Enter your email"),
               const SizedBox(height: 140),
               RoundButton(text: "Save", onPressed: () {})
+              
             ],
           ),
         ),

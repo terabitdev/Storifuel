@@ -103,7 +103,6 @@ class FavouriteScreen extends StatelessWidget {
             AppImages.nonFavIcon,
             width: 80,
             height: 80,
-            color: Colors.grey[400],
           ),
           const SizedBox(height: 16),
           Text(
