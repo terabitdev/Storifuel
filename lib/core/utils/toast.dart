@@ -42,20 +42,20 @@ void _showThemedToast({
   );
 }
 
-void showSuccessToast(BuildContext context, String title, String message) {
+void showSuccessToast(BuildContext context, String message, {String? title}) {
   _showThemedToast(
     context: context,
-    title: title,
+    title: title ?? 'Success',
     message: message,
     icon: Icons.check_circle,
     type: ToastificationType.success,
   );
 }
 
-void showErrorToast(BuildContext context, String title, String message) {
+void showErrorToast(BuildContext context, String message, {String? title}) {
   _showThemedToast(
     context: context,
-    title: title,
+    title: title ?? 'Error',
     message: message,
     icon: Icons.error_outline_outlined,
     type: ToastificationType.error,

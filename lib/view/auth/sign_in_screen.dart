@@ -5,18 +5,58 @@ import 'package:storifuel/core/constants/app_colors.dart';
 import 'package:storifuel/core/constants/app_images.dart';
 import 'package:storifuel/core/theme/app_fonts.dart';
 import 'package:storifuel/core/theme/app_responsiveness.dart';
+import 'package:storifuel/core/utils/toast.dart';
 import 'package:storifuel/view_model/Auth/auth_provider.dart';
 import 'package:storifuel/widgets/auth/custom_textfield.dart';
 import 'package:storifuel/widgets/common/auth_redirect_text.dart';
 import 'package:storifuel/widgets/common/round_button.dart';
 
-class SignInScreen extends StatelessWidget {
+class SignInScreen extends StatefulWidget {
+  SignInScreen({super.key});
+
+  @override
+  State<SignInScreen> createState() => _SignInScreenState();
+}
+
+class _SignInScreenState extends State<SignInScreen> {
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
   final FocusNode emailFocusNode = FocusNode();
   final FocusNode passwordFocusNode = FocusNode();
+  final _formKey = GlobalKey<FormState>();
 
-  SignInScreen({super.key});
+  @override
+  void dispose() {
+    emailController.dispose();
+    passwordController.dispose();
+    emailFocusNode.dispose();
+    passwordFocusNode.dispose();
+    super.dispose();
+  }
+
+  void handleSignIn() async {
+    if (!_formKey.currentState!.validate()) {
+      return;
+    }
+
+    final authProvider = context.read<AuthProvider>();
+    
+    final success = await authProvider.signIn(
+      email: emailController.text.trim(),
+      password: passwordController.text,
+    );
+
+    if (success) {
+      if (mounted) {
+        showSuccessToast(context, 'Welcome back!');
+        Navigator.pushReplacementNamed(context, '/navbar');
+      }
+    } else {
+      if (mounted && authProvider.errorMessage != null) {
+        showErrorToast(context, authProvider.errorMessage!);
+      }
+    }
+  }
 
   @override
   Widget build(BuildContext context) {

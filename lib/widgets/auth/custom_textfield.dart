@@ -10,6 +10,7 @@ class CustomTextField extends StatelessWidget {
   final FocusNode? focusNode;
   final TextInputType? keyboardType;
   final VoidCallback? onSubmitted;
+  final String? Function(String?)? validator;
 
   const CustomTextField({
     super.key,
@@ -20,18 +21,20 @@ class CustomTextField extends StatelessWidget {
     this.focusNode,
     this.keyboardType,
     this.onSubmitted,
+    this.validator,
   });
 
   @override
   Widget build(BuildContext context) {
-    return TextField(
+    return TextFormField(
       style: outfit14w300,
       controller: controller,
       obscureText: obscureText,
       focusNode: focusNode,
       keyboardType: keyboardType,
       textInputAction: TextInputAction.done,
-      onSubmitted: (value) => onSubmitted?.call(),
+      onFieldSubmitted: (value) => onSubmitted?.call(),
+      validator: validator,
       decoration: InputDecoration(
         labelText: labelText,
         labelStyle: outfit12w300,
@@ -50,6 +53,14 @@ class CustomTextField extends StatelessWidget {
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),
           borderSide: BorderSide(color: secondaryColor),
+        ),
+        errorBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(12),
+          borderSide: BorderSide(color: Colors.red),
+        ),
+        focusedErrorBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(12),
+          borderSide: BorderSide(color: Colors.red),
         ),
         suffixIcon: suffixIcon,
       ),

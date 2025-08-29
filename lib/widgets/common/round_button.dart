@@ -4,9 +4,10 @@ import 'package:storifuel/core/theme/app_fonts.dart';
 
 class RoundButton extends StatelessWidget {
   final String text;
-  final VoidCallback onPressed;
+  final VoidCallback? onPressed;
   final Color? backgroundColor;
   final double? borderRadius;
+  final bool isLoading;
 
   const RoundButton({
     super.key,
@@ -14,6 +15,7 @@ class RoundButton extends StatelessWidget {
     required this.onPressed,
     this.backgroundColor,
     this.borderRadius,
+    this.isLoading = false,
   });
 
   @override
@@ -23,16 +25,25 @@ class RoundButton extends StatelessWidget {
       child: Container(
         width: double.infinity,
         decoration: BoxDecoration(
-          color: secondaryColor,
+          color: onPressed == null ? secondaryColor.withOpacity(0.6) : secondaryColor,
           borderRadius: BorderRadius.circular(6),
         ),
         child: Padding(
           padding: EdgeInsets.symmetric(vertical: 16.0, horizontal: 16.0),
           child: Center(
-            child: Text(
-              text,
-              style: nunitoSans16w700,
-            ),
+            child: isLoading
+                ? const SizedBox(
+                    width: 20,
+                    height: 20,
+                    child: CircularProgressIndicator(
+                      color: Colors.white,
+                      strokeWidth: 2,
+                    ),
+                  )
+                : Text(
+                    text,
+                    style: nunitoSans16w700,
+                  ),
           ),
         ),
       ),
