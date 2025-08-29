@@ -104,3 +104,9 @@ final TextStyle nunito14w500 = GoogleFonts.nunito(
   color: Color(0xFF151515),
 );
 
+final TextStyle nunito14w600 = GoogleFonts.nunitoSans(
+  fontSize: 14,
+  fontWeight: FontWeight.w600,
+  color: Color(0xFF151515),
+);
+

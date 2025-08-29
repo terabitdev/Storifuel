@@ -13,6 +13,7 @@ import 'package:storifuel/view/auth/sign_up_screen.dart';
 import 'package:storifuel/view/onboarding/splash_screen.dart';
 import 'package:storifuel/view/profile/profile_screen.dart';
 import 'package:storifuel/view/story/create_story_screen.dart';
+import 'package:storifuel/view/story_details/story_details_screen.dart';
 import 'package:storifuel/view_model/Auth/auth_provider.dart';
 import 'package:storifuel/view_model/dashboard/dashboard_provider.dart';
 import 'package:storifuel/view_model/home/home_provider.dart';
@@ -90,6 +91,19 @@ class Routes {
       case RoutesName.profile:
         return MaterialPageRoute(
           builder: (BuildContext context) => const ProfileScreen(),
+        );
+      case RoutesName.storyDetails:
+        final args = settings.arguments as Map<String, dynamic>;
+        return MaterialPageRoute(
+          builder: (BuildContext context) => StoryDetailsScreen(
+            storyId: args['storyId'],
+            image: args['image'],
+            title: args['title'],
+            category: args['category'],
+            timeAgo: args['timeAgo'],
+            tags: args['tags'],
+            content: args['content'],
+          ),
         );
         
       default:

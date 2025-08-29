@@ -11,4 +11,5 @@ class RoutesName {
   static const String profile = '/profile';
   static const String navbar = '/navbar';
   static const String createStory = '/create-story';
+  static const String storyDetails = '/story-details';
 }

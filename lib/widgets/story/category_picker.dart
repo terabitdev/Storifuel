@@ -43,15 +43,15 @@ class CategoryPicker extends StatelessWidget {
           ),
         ),
         const SizedBox(height: 12),
-        Row(
-          children: [
-            GestureDetector(
-              onTap: () => _openAddBottomSheet(context, provider),
-              child: SvgPicture.asset(AppImages.octagonPlusIcon),
-            ),
-            const SizedBox(width: 10),
-            Text('Add New Category', style: outfit14w500.copyWith(color: secondaryColor)),
-          ],
+        GestureDetector(
+          onTap: () => _openAddBottomSheet(context, provider),
+          child: Row(
+            children: [
+              SvgPicture.asset(AppImages.octagonPlusIcon),
+              const SizedBox(width: 10),
+              Text('Add New Category', style: outfit14w500.copyWith(color: secondaryColor)),
+            ],
+          ),
         )
       ],
     );

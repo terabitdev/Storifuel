@@ -30,4 +30,8 @@ class AppImages {
   static const String voiceIcon = 'assets/icons/voice.svg';
   static const String octagonPlusIcon = 'assets/icons/octagon-plus.svg';
   static const String drawerIcon = 'assets/icons/drawer.svg';
+  static const String arrowIcon = 'assets/images/arrow.png';
+  static const String shareIcon = 'assets/icons/share.svg';
+  static const String pdfIcon = 'assets/images/download.png';
+  static const String messageEditIcon = 'assets/images/message-edit.png';
 }
