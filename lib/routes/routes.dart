@@ -15,6 +15,8 @@ import 'package:storifuel/view/profile/profile_screen.dart';
 import 'package:storifuel/view/story/create_story_screen.dart';
 import 'package:storifuel/view_model/Auth/auth_provider.dart';
 import 'package:storifuel/view_model/dashboard/dashboard_provider.dart';
+import 'package:storifuel/view_model/home/home_provider.dart';
+import 'package:storifuel/view_model/favourite/favourite_provider.dart';
 import 'package:storifuel/view_model/story/story_provider.dart';
 
 class Routes {
@@ -67,9 +69,12 @@ class Routes {
             child: CustomNavigationBar(),
           ),
         );
-        case RoutesName.home:
+         case RoutesName.home:
         return MaterialPageRoute(
-          builder: (BuildContext context) => const HomeScreen(),
+          builder: (BuildContext context) => ChangeNotifierProvider(
+            create: (_) => HomeProvider(),
+            child: HomeScreen(),
+          ),
         );
       case RoutesName.category:
         return MaterialPageRoute(
@@ -77,7 +82,10 @@ class Routes {
         );
       case RoutesName.favourite:
         return MaterialPageRoute(
-          builder: (BuildContext context) => const FavouriteScreen(),
+          builder: (BuildContext context) => ChangeNotifierProvider(
+            create: (_) => FavouriteProvider(),
+            child: FavouriteScreen(),
+          ),
         );
       case RoutesName.profile:
         return MaterialPageRoute(

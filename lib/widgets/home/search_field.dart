@@ -6,8 +6,14 @@ import 'package:storifuel/core/theme/app_fonts.dart';
 class SearchWidget extends StatelessWidget {
   final TextEditingController controller;
   final Function(String)? onChanged;
+  final VoidCallback? onFilterTap;
 
-  const SearchWidget({super.key, required this.controller, this.onChanged});
+  const SearchWidget({
+    super.key, 
+    required this.controller, 
+    this.onChanged,
+    this.onFilterTap,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -27,9 +33,12 @@ class SearchWidget extends StatelessWidget {
             padding: const EdgeInsets.all(12.0),
             child: SvgPicture.asset(AppImages.searchIcon),
           ),
-          suffixIcon: Padding(
-            padding: const EdgeInsets.all(12.0),
-            child: SvgPicture.asset(AppImages.filterIcon),
+          suffixIcon: GestureDetector(
+            onTap: onFilterTap,
+            child: Padding(
+              padding: const EdgeInsets.all(12.0),
+              child: SvgPicture.asset(AppImages.filterIcon),
+            ),
           ),
           hintText: "Search stories",
           hintStyle: poppins14w400,

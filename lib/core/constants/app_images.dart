@@ -29,4 +29,5 @@ class AppImages {
   static const String uploadIcon = 'assets/icons/upload.svg';
   static const String voiceIcon = 'assets/icons/voice.svg';
   static const String octagonPlusIcon = 'assets/icons/octagon-plus.svg';
+  static const String drawerIcon = 'assets/icons/drawer.svg';
 }

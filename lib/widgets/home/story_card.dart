@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:provider/provider.dart';
 import 'package:storifuel/core/constants/app_images.dart';
 import 'package:storifuel/core/theme/app_fonts.dart';
+import 'package:storifuel/view_model/home/home_provider.dart';
 
 class StoryCard extends StatelessWidget {
+  final String storyId;
   final String image;
   final String title;
   final String description;
@@ -11,6 +14,7 @@ class StoryCard extends StatelessWidget {
 
   const StoryCard({
     super.key,
+    required this.storyId,
     required this.image,
     required this.title,
     required this.description,
@@ -49,20 +53,20 @@ class StoryCard extends StatelessWidget {
               Positioned(
                 top: 10,
                 left: 10,
-                child: Container(
-                  width: 34,
-                  height: 34,
-                  decoration: BoxDecoration(
-                    color: Colors.white.withOpacity(0.8),
-                    shape: BoxShape.circle,
-                  ),
-                  child: Center(
-                    child: SvgPicture.asset(
-                      AppImages.favIcon,
-                      height: 20,
-                      width: 20,
-                    ),
-                  ),
+                child: Consumer<HomeProvider>(
+                  builder: (context, provider, _) {
+                    final isFavorited = provider.isStoryFavorited(storyId);
+                    return GestureDetector(
+                      onTap: () => provider.toggleFavorite(storyId),
+                      child: Center(
+                        child: SvgPicture.asset(
+                          isFavorited ? AppImages.favIcon : AppImages.nonFavIcon,
+                          height: 30,
+                          width: 30,
+                        ),
+                      ),
+                    );
+                  },
                 ),
               ),
             ],
@@ -100,7 +104,7 @@ class StoryCard extends StatelessWidget {
                             AppImages.clockIcon,
                             height: 14,
                             width: 14,
-                            color: Colors.white,
+                            colorFilter: const ColorFilter.mode(Colors.white, BlendMode.srcIn),
                           ),
                           const SizedBox(width: 4),
                           Text(
