@@ -46,7 +46,7 @@ class StoryOptionsPopup extends StatelessWidget {
                   const SizedBox(width: 12),
                   Text(
                     'Edit',
-                    style: nunito14w500.copyWith(color: const Color(0xFF1A237E)),
+                    style: nunito14w500.copyWith(color: const Color(0xFF191919)),
                   ),
                 ],
               ),
@@ -81,7 +81,7 @@ class StoryOptionsPopup extends StatelessWidget {
                   const SizedBox(width: 12),
                   Text(
                     'Export PDF',
-                    style: nunito14w500.copyWith(color: const Color(0xFF1A237E)),
+                    style: nunito14w500.copyWith(color: const Color(0xFF191919)),
                   ),
                 ],
               ),
