@@ -8,14 +8,12 @@ class AuthProvider extends ChangeNotifier {
   late SharedPreferencesService _prefsService;
   
   bool _isPasswordVisible = false;
-  bool _rememberMe = false;
   bool _isLoading = false;
   bool _isInitialized = false;
   String? _errorMessage;
   User? _currentUser;
 
   bool get isPasswordVisible => _isPasswordVisible;
-  bool get rememberMe => _rememberMe;
   bool get isLoading => _isLoading;
   bool get isInitialized => _isInitialized;
   String? get errorMessage => _errorMessage;
@@ -35,27 +33,23 @@ class AuthProvider extends ChangeNotifier {
       // Initialize current user
       _currentUser = _authService.currentUser;
       
-      // Load remember me state
-      _rememberMe = _prefsService.getRememberMe();
-      
       // Listen to auth state changes
       _authService.authStateChanges.listen((User? user) async {
         _currentUser = user;
         
         if (user != null) {
-          // User is signed in - validate and save user info if remember me is enabled
+          // User is signed in - validate and save user info
           try {
             // Validate the user token to ensure account still exists
             await user.reload();
             final token = await user.getIdToken(true);
             
-            if (_rememberMe) {
-              await _prefsService.setUserToken(token!);
-              await _prefsService.setUserInfo(
-                uid: user.uid,
-                email: user.email ?? '',
-              );
-            }
+            // Always save user session data
+            await _prefsService.setUserToken(token!);
+            await _prefsService.setUserInfo(
+              uid: user.uid,
+              email: user.email ?? '',
+            );
             
             // print('Auth state: User signed in - ${user.email}');
           } catch (e) {
@@ -63,13 +57,11 @@ class AuthProvider extends ChangeNotifier {
             // If token validation fails, sign out
             _currentUser = null;
             await _prefsService.clearAllUserData();
-            _rememberMe = false;
           }
         } else {
           // User is signed out - clear saved data
           // print('Auth state: User signed out');
           await _prefsService.clearAllUserData();
-          _rememberMe = false;
         }
         
         notifyListeners();
@@ -107,14 +99,12 @@ class AuthProvider extends ChangeNotifier {
           // If still no user after waiting, clear stored data
           // print('Token exists but user not restored, clearing stored data');
           await _prefsService.clearAllUserData();
-          _rememberMe = false;
           notifyListeners();
         }
       }
     } catch (e) {
       // print('Error checking existing session: $e');
       await _prefsService.clearAllUserData();
-      _rememberMe = false;
       notifyListeners();
     }
   }
@@ -148,18 +138,6 @@ class AuthProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> toggleRememberMe(bool value) async {
-    _rememberMe = value;
-    await _prefsService.setRememberMe(value);
-    
-    if (!value) {
-      // If remember me is unchecked, clear saved session data
-      await _prefsService.clearUserToken();
-      await _prefsService.clearUserInfo();
-    }
-    
-    notifyListeners();
-  }
 
   void _setLoading(bool loading) {
     _isLoading = loading;
@@ -252,8 +230,8 @@ class AuthProvider extends ChangeNotifier {
 
   Future<void> signOut() async {
     await _authService.signOut();
-    _rememberMe = false;
-    await _prefsService.setRememberMe(false);
+    // The auth state listener will automatically clear all user data
+    // when user becomes null
     notifyListeners();
   }
 

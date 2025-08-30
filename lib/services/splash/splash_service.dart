@@ -48,7 +48,7 @@ class SplashService {
     } else {
       // Returning user but not signed in, go to sign in
       // print('Returning user not signed in, navigating to sign-in');
-      Navigator.pushReplacementNamed(context, '/sign-in');
+      Navigator.pushReplacementNamed(context, '/onboarding');
     }
   }
 }

@@ -14,15 +14,6 @@ class SharedPreferencesService {
     return _instance!;
   }
 
-  // Remember Me functionality
-  Future<void> setRememberMe(bool value) async {
-    await _prefs?.setBool('remember_me', value);
-  }
-
-  bool getRememberMe() {
-    return _prefs?.getBool('remember_me') ?? false;
-  }
-
   // User session token
   Future<void> setUserToken(String token) async {
     await _prefs?.setString('user_token', token);
@@ -70,6 +61,5 @@ class SharedPreferencesService {
   Future<void> clearAllUserData() async {
     await clearUserToken();
     await clearUserInfo();
-    await setRememberMe(false);
   }
 }

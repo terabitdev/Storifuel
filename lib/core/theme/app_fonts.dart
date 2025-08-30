@@ -115,4 +115,25 @@ final TextStyle nunito12w400 = GoogleFonts.nunitoSans(
   color: Color(0xFF151515),
 );
 
+final TextStyle gilroy16w600 = TextStyle(
+  fontFamily: 'Gilroy',
+  fontSize: 16,
+  fontWeight: FontWeight.w600,
+  color: Color(0xFF0F182E),
+);
+
+final TextStyle gilroy12w400 = TextStyle(
+  fontFamily: 'Gilroy',
+  fontSize: 12,
+  fontWeight: FontWeight.w400,
+  color: Color(0xFF848D94),
+);
+
+final TextStyle gilroy14w400 = TextStyle(
+  fontFamily: 'Gilroy',
+  fontSize: 14,
+  fontWeight: FontWeight.w400,
+  color: Color(0xFF848D94),
+);
+
 

@@ -30,12 +30,12 @@ class ProfileCustomTextField extends StatelessWidget {
           decoration: InputDecoration(
             hintText: hint,
             filled: true,
-            fillColor: const Color.fromARGB(127, 249, 250, 251),
+            fillColor: Color(0xFFF9FAFB),
             contentPadding:
                 const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
                         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),
-          borderSide: BorderSide(color: outlineInputColor),
+          borderSide: BorderSide.none
         ),
         enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),

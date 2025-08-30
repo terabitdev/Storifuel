@@ -111,7 +111,7 @@ Therefore, Bitcoin serves as the ultimate benchmark of crypto market trends and 
                     Expanded(
                       child: Text(
                         title,
-                        style: poppins16w600,
+                        style: nunitoSans18w700,
                         maxLines: 2,
                         overflow: TextOverflow.ellipsis,
                       ),
@@ -136,7 +136,7 @@ Therefore, Bitcoin serves as the ultimate benchmark of crypto market trends and 
                           const SizedBox(width: 4),
                           Text(
                             timeAgo,
-                            style: poppins12w400.copyWith(color: Colors.white),
+                            style: nunito12w400.copyWith(color: Colors.white, fontSize: 10,fontWeight: FontWeight.w400),
                           ),
                         ],
                       ),
@@ -148,7 +148,7 @@ Therefore, Bitcoin serves as the ultimate benchmark of crypto market trends and 
                   description,
                   maxLines: 2,
                   overflow: TextOverflow.ellipsis,
-                  style: poppins14w400.copyWith(color: Colors.grey),
+                  style: nunito12w400.copyWith(color: Colors.grey),
                 ),
                 const SizedBox(height: 10),
               ],

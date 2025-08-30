@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
-import 'package:storifuel/core/constants/app_colors.dart';
 import 'package:storifuel/core/constants/app_images.dart';
 import 'package:storifuel/core/theme/app_fonts.dart';
 import 'package:storifuel/core/theme/app_responsiveness.dart';
@@ -45,12 +44,6 @@ class _SignInScreenState extends State<SignInScreen> {
     }
 
     final authProvider = context.read<AuthProvider>();
-    
-    // Validate remember me checkbox if required
-    if (!authProvider.rememberMe) {
-      showErrorToast(context, 'Please check "Remember Me" to continue');
-      return;
-    }
 
     final success = await authProvider.signIn(
       email: emailController.text.trim(),
@@ -146,36 +139,14 @@ class _SignInScreenState extends State<SignInScreen> {
                     ),
                   ),
                   const SizedBox(height: 27),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Row(
-                        children: [
-                          Checkbox(
-                            activeColor: secondaryColor,
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(4),
-                            ),
-                            value: authProvider.rememberMe,
-                            onChanged: (val) {
-                              authProvider.toggleRememberMe(val ?? false);
-                            },
-                          ),
-                          GestureDetector(
-                            onTap: () {
-                              authProvider.toggleRememberMe(!authProvider.rememberMe);
-                            },
-                            child: Text("Remember Me *", style: outfit12w400),
-                          ),
-                        ],
-                      ),
-                      TextButton(
-                        onPressed: () {
-                          Navigator.pushNamed(context, '/forgot-password');
-                        },
-                        child: Text("Forgot Password?", style: outfit12w4001),
-                      ),
-                    ],
+                  Align(
+                    alignment: Alignment.centerRight,
+                    child: TextButton(
+                      onPressed: () {
+                        Navigator.pushNamed(context, '/forgot-password');
+                      },
+                      child: Text("Forgot Password?", style: outfit12w4001),
+                    ),
                   ),
                   const SizedBox(height: 27),
                   RoundButton(
