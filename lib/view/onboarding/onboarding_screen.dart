@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:storifuel/core/constants/app_images.dart';
 import 'package:storifuel/core/theme/app_fonts.dart';
 import 'package:storifuel/core/theme/app_responsiveness.dart';
+import 'package:storifuel/view_model/Auth/auth_provider.dart';
 import 'package:storifuel/widgets/common/auth_redirect_text.dart';
 import 'package:storifuel/widgets/common/round_button.dart';
 
@@ -89,11 +91,17 @@ class OnboardingScreen extends StatelessWidget {
                   // Join Now Button
                   RoundButton(
                     text: "Join Now",
-                    onPressed: () {
+                    onPressed: () async {
+                      final authProvider = context.read<AuthProvider>();
+                      await authProvider.setFirstTimeLaunchCompleted();
+                      // ignore: use_build_context_synchronously
                       Navigator.pushNamed(context, '/sign-up');
                     },
                   ),
-                 AuthRedirectText(leadingText: "Already have an account? ", actionText: "Sign In", onTap: () {
+                 AuthRedirectText(leadingText: "Already have an account? ", actionText: "Sign In", onTap: () async {
+                   final authProvider = context.read<AuthProvider>();
+                   await authProvider.setFirstTimeLaunchCompleted();
+                   // ignore: use_build_context_synchronously
                    Navigator.pushNamed(context, '/sign-in');
                  })
                 ],

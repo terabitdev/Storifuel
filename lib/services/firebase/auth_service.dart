@@ -100,23 +100,29 @@ class AuthService {
   String getErrorMessage(String errorCode) {
     switch (errorCode) {
       case 'user-not-found':
-        return 'No user found with this email address.';
+        return 'No account found with this email address. Please sign up to create a new account.';
       case 'wrong-password':
-        return 'Incorrect password.';
+        return 'Incorrect password. Please try again or reset your password.';
+      case 'invalid-credential':
+        return 'Invalid email or password. Please check your credentials and try again.';
       case 'email-already-in-use':
-        return 'An account already exists with this email.';
+        return 'An account already exists with this email. Please sign in instead.';
       case 'weak-password':
-        return 'Password is too weak. Please use at least 6 characters.';
+        return 'Password is too weak. Please use at least 6 characters with a mix of letters and numbers.';
       case 'invalid-email':
-        return 'Invalid email address.';
+        return 'Please enter a valid email address.';
       case 'user-disabled':
-        return 'This account has been disabled.';
+        return 'This account has been disabled. Please contact support for assistance.';
       case 'too-many-requests':
-        return 'Too many failed attempts. Please try again later.';
+        return 'Too many failed login attempts. Please wait a few minutes before trying again.';
       case 'network-request-failed':
-        return 'Network error. Please check your connection.';
+        return 'Unable to connect to the internet. Please check your connection and try again.';
+      case 'operation-not-allowed':
+        return 'This operation is not allowed. Please contact support.';
+      case 'requires-recent-login':
+        return 'This operation requires recent authentication. Please sign in again.';
       default:
-        return 'An error occurred. Please try again.';
+        return 'Something went wrong. Please try again or contact support if the problem persists.';
     }
   }
 }

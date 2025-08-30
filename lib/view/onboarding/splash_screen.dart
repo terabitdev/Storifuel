@@ -25,16 +25,16 @@ class _SplashScreenState extends State<SplashScreen> {
         width: double.infinity,
         height: double.infinity,
         decoration: const BoxDecoration(
-          gradient: RadialGradient(
-            center: Alignment.center,
-            radius: 1.3,
+          shape: BoxShape.rectangle,
+          gradient: LinearGradient(
             colors: [
-              Color(0xFF2D5980), 
-              Color(0xFF4A7BA7), 
-              Color(0xFF6B9BC9), 
-              Color(0xFFFFFFFF), 
+              Color(0xFF1a3a5c), // Darker blue at top
+              Color(0xFF4a6fa5), // Lighter blue in middle
+              Color(0xFF1a3a5c), // Darker blue at bottom
             ],
-            stops: [0.0, 0.4, 0.7, 1.0],
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
+            stops: [0.0, 0.5, 1.0],
           ),
         ),
         child: Center(

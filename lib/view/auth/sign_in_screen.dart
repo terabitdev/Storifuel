@@ -26,6 +26,11 @@ class _SignInScreenState extends State<SignInScreen> {
   final _formKey = GlobalKey<FormState>();
 
   @override
+  void initState() {
+    super.initState();
+  }
+
+  @override
   void dispose() {
     emailController.dispose();
     passwordController.dispose();
@@ -41,6 +46,12 @@ class _SignInScreenState extends State<SignInScreen> {
 
     final authProvider = context.read<AuthProvider>();
     
+    // Validate remember me checkbox if required
+    if (!authProvider.rememberMe) {
+      showErrorToast(context, 'Please check "Remember Me" to continue');
+      return;
+    }
+
     final success = await authProvider.signIn(
       email: emailController.text.trim(),
       password: passwordController.text,
@@ -48,7 +59,14 @@ class _SignInScreenState extends State<SignInScreen> {
 
     if (success) {
       if (mounted) {
-        showSuccessToast(context, 'Welcome back!');
+        // Wait for auth state to update
+        await Future.delayed(const Duration(milliseconds: 500));
+        final user = authProvider.currentUser;
+        // ignore: use_build_context_synchronously
+        showSuccessToast(context, user != null 
+            ? 'Welcome back, ${user.email}!' 
+            : 'Welcome back!');
+        // ignore: use_build_context_synchronously
         Navigator.pushReplacementNamed(context, '/navbar');
       }
     } else {
@@ -69,88 +87,112 @@ class _SignInScreenState extends State<SignInScreen> {
             horizontal: 24,
             vertical: context.screenHeight * 0.03,
           ),
-          child: SingleChildScrollView(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Image.asset(AppImages.logo1, width: 118, height: 32),
-                const SizedBox(height: 90),
-                Text("Sign In", style: poppins29w600),
-                const SizedBox(height: 60),
-                CustomTextField(
-                  labelText: "EMAIL",
-                  controller: emailController,
-                  focusNode: emailFocusNode,
-                  keyboardType: TextInputType.emailAddress,
-                  onSubmitted: () {
-                    passwordFocusNode.requestFocus(); 
-                  },
-                ),
-                const SizedBox(height: 37),
-                CustomTextField(
-                  labelText: "PASSWORD",
-                  controller: passwordController,
-                  obscureText: !authProvider.isPasswordVisible,
-                  focusNode: passwordFocusNode,
-                  keyboardType: TextInputType.visiblePassword,
-                  onSubmitted: () {
-                  },
-                  suffixIcon: IconButton(
-                    onPressed: () {
-                      authProvider.togglePasswordVisibility();
+          child: Form(
+            key: _formKey,
+            child: SingleChildScrollView(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Image.asset(AppImages.logo1, width: 118, height: 32),
+                  const SizedBox(height: 90),
+                  Text("Sign In", style: poppins29w600),
+                  const SizedBox(height: 60),
+                  CustomTextField(
+                    labelText: "EMAIL",
+                    controller: emailController,
+                    focusNode: emailFocusNode,
+                    keyboardType: TextInputType.emailAddress,
+                    validator: (value) {
+                      if (value == null || value.trim().isEmpty) {
+                        return 'Email is required';
+                      }
+                      final emailRegex = RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$');
+                      if (!emailRegex.hasMatch(value.trim())) {
+                        return 'Enter a valid email address';
+                      }
+                      return null;
                     },
-                    icon: SvgPicture.asset(
-                      height: 20,
-                      width: 20,
-                      authProvider.isPasswordVisible
-                          ? AppImages.eyeOpenIcon
-                          : AppImages.eyeClosedIcon,
+                    onSubmitted: () {
+                      passwordFocusNode.requestFocus(); 
+                    },
+                  ),
+                  const SizedBox(height: 37),
+                  CustomTextField(
+                    labelText: "PASSWORD",
+                    controller: passwordController,
+                    obscureText: !authProvider.isPasswordVisible,
+                    focusNode: passwordFocusNode,
+                    keyboardType: TextInputType.visiblePassword,
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Password is required';
+                      }
+                      if (value.length < 6) {
+                        return 'Password must be at least 6 characters';
+                      }
+                      return null;
+                    },
+                    suffixIcon: IconButton(
+                      onPressed: () {
+                        authProvider.togglePasswordVisibility();
+                      },
+                      icon: SvgPicture.asset(
+                        height: 20,
+                        width: 20,
+                        authProvider.isPasswordVisible
+                            ? AppImages.eyeOpenIcon
+                            : AppImages.eyeClosedIcon,
+                      ),
                     ),
                   ),
-                ),
-                const SizedBox(height: 27),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Row(
-                      children: [
-                        Checkbox(
-                          activeColor: secondaryColor,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(4),
+                  const SizedBox(height: 27),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Row(
+                        children: [
+                          Checkbox(
+                            activeColor: secondaryColor,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(4),
+                            ),
+                            value: authProvider.rememberMe,
+                            onChanged: (val) {
+                              authProvider.toggleRememberMe(val ?? false);
+                            },
                           ),
-                          value: authProvider.rememberMe,
-                          onChanged: (val) {
-                            authProvider.toggleRememberMe(val ?? false);
-                          },
-                        ),
-                        Text("Remember Me", style: outfit12w400),
-                      ],
-                    ),
-                    TextButton(
-                      onPressed: () {
-                        Navigator.pushNamed(context, '/forgot-password');
-                      },
-                      child: Text("Forgot Password?", style: outfit12w4001),
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 27),
-                RoundButton(
-                  text: "Sign In",
-                  onPressed: () {
-                    Navigator.pushNamed(context, '/navbar');
-                  },
-                ),
-                SizedBox(height: 190),
-                AuthRedirectText(
-                  leadingText: "No account yet? ",
-                  actionText: "Sign up now!",
-                  onTap: () {
-                    Navigator.pushNamed(context, '/sign-up');
-                  },
-                ),
-              ],
+                          GestureDetector(
+                            onTap: () {
+                              authProvider.toggleRememberMe(!authProvider.rememberMe);
+                            },
+                            child: Text("Remember Me *", style: outfit12w400),
+                          ),
+                        ],
+                      ),
+                      TextButton(
+                        onPressed: () {
+                          Navigator.pushNamed(context, '/forgot-password');
+                        },
+                        child: Text("Forgot Password?", style: outfit12w4001),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 27),
+                  RoundButton(
+                    text: authProvider.isLoading ? "Signing in..." : "Sign In",
+                    isLoading: authProvider.isLoading,
+                    onPressed: authProvider.isLoading ? null : handleSignIn,
+                  ),
+                  SizedBox(height: 190),
+                  AuthRedirectText(
+                    leadingText: "No account yet? ",
+                    actionText: "Sign up now!",
+                    onTap: () {
+                      Navigator.pushNamed(context, '/sign-up');
+                    },
+                  ),
+                ],
+              ),
             ),
           ),
         ),

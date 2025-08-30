@@ -21,6 +21,9 @@ class _SignUpScreenState extends State<SignUpScreen> {
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
   final TextEditingController fullNameController = TextEditingController();
+  final FocusNode emailFocusNode = FocusNode();
+  final FocusNode passwordFocusNode = FocusNode();
+  final FocusNode fullNameFocusNode = FocusNode();
   final _formKey = GlobalKey<FormState>();
 
   @override
@@ -37,7 +40,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
     }
 
     final authProvider = context.read<AuthProvider>();
-    
+
     final success = await authProvider.signUp(
       email: emailController.text.trim(),
       password: passwordController.text,
@@ -59,7 +62,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
   @override
   Widget build(BuildContext context) {
     final authProvider = context.watch<AuthProvider>();
-    return  Scaffold(
+    return Scaffold(
       body: SafeArea(
         child: Padding(
           padding: EdgeInsets.symmetric(
@@ -84,7 +87,16 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       if (value == null || value.trim().isEmpty) {
                         return 'Full name is required';
                       }
+                      if (value.trim().length < 2) {
+                        return 'Full name must be at least 2 characters';
+                      }
+                      if (!RegExp(r'^[a-zA-Z\s]+$').hasMatch(value.trim())) {
+                        return 'Full name cannot contain special characters or numbers';
+                      }
                       return null;
+                    },
+                    onSubmitted: () {
+                      emailFocusNode.requestFocus();
                     },
                   ),
                   const SizedBox(height: 37),
@@ -100,6 +112,9 @@ class _SignUpScreenState extends State<SignUpScreen> {
                         return 'Enter a valid email address';
                       }
                       return null;
+                    },
+                    onSubmitted: () {
+                      passwordFocusNode.requestFocus();
                     },
                   ),
                   const SizedBox(height: 37),
