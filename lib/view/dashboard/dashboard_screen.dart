@@ -7,6 +7,7 @@ import 'package:storifuel/routes/routes_name.dart';
 import 'package:storifuel/view_model/dashboard/dashboard_provider.dart';
 import 'package:storifuel/view_model/home/home_provider.dart';
 import 'package:storifuel/view_model/favourite/favourite_provider.dart';
+import 'package:storifuel/view_model/category/category_provider.dart';
 
 class CustomNavigationBar extends StatelessWidget {
   const CustomNavigationBar({super.key});
@@ -17,6 +18,7 @@ class CustomNavigationBar extends StatelessWidget {
       providers: [
         ChangeNotifierProvider(create: (_) => NavBarProvider()),
         ChangeNotifierProvider(create: (_) => HomeProvider()),
+        ChangeNotifierProvider(create: (_) => CategoryProvider()),
         ChangeNotifierProxyProvider<HomeProvider, FavouriteProvider>(
           create: (_) => FavouriteProvider(),
           update: (_, homeProvider, favouriteProvider) {

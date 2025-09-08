@@ -18,6 +18,7 @@ import 'package:storifuel/view_model/dashboard/dashboard_provider.dart';
 import 'package:storifuel/view_model/home/home_provider.dart';
 import 'package:storifuel/view_model/favourite/favourite_provider.dart';
 import 'package:storifuel/view_model/story/story_provider.dart';
+import 'package:storifuel/view_model/category/category_provider.dart';
 
 class Routes {
   static Route<dynamic> generateRoute(RouteSettings settings) {
@@ -69,7 +70,10 @@ class Routes {
         );
       case RoutesName.category:
         return MaterialPageRoute(
-          builder: (BuildContext context) => const CategoryScreen(),
+          builder: (BuildContext context) => ChangeNotifierProvider(
+            create: (_) => CategoryProvider(),
+            child: const CategoryScreen(),
+          ),
         );
       case RoutesName.favourite:
         return MaterialPageRoute(
