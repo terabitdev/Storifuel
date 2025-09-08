@@ -39,7 +39,9 @@ class CreateStoryScreen extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    MediaUploader(onTap: () {}),
+                    MediaUploader(
+                      onImageSelected: (image) => provider.setSelectedImage(image),
+                    ),
                     const SizedBox(height: 20),
                     TitleField(controller: provider.titleController),
                     const SizedBox(height: 20),

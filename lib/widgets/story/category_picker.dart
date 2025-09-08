@@ -4,8 +4,11 @@ import 'package:provider/provider.dart';
 import 'package:storifuel/core/constants/app_colors.dart';
 import 'package:storifuel/core/constants/app_images.dart';
 import 'package:storifuel/core/theme/app_fonts.dart';
+import 'package:storifuel/core/utils/toast.dart';
 import 'package:storifuel/view_model/story/story_provider.dart';
+import 'package:storifuel/view_model/category/category_provider.dart';
 import 'package:storifuel/widgets/common/round_button.dart';
+import 'package:storifuel/widgets/category/add_category_sheet.dart';
 
 class CategoryPicker extends StatelessWidget {
   const CategoryPicker({super.key});
@@ -64,13 +67,16 @@ class CategoryPicker extends StatelessWidget {
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
       ),
-      builder: (context) {
-        return ChangeNotifierProvider<StoryProvider>.value(
-          value: provider,
+      builder: (bottomSheetContext) {
+        return MultiProvider(
+          providers: [
+            ChangeNotifierProvider<StoryProvider>.value(value: provider),
+            ChangeNotifierProvider<CategoryProvider>(create: (_) => CategoryProvider()),
+          ],
           child: Padding(
             padding: const EdgeInsets.fromLTRB(20, 12, 20, 24),
-            child: Consumer<StoryProvider>(
-              builder: (context, p, _) {
+            child: Consumer2<StoryProvider, CategoryProvider>(
+              builder: (context, storyProvider, categoryProvider, _) {
                 return Column(
                   mainAxisSize: MainAxisSize.min,
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -88,15 +94,31 @@ class CategoryPicker extends StatelessWidget {
                     ),
                     Center(child: Text('Select Categories', style: nunitoSans16w700.copyWith(color: const Color(0xFF0F182E)))),
                     const SizedBox(height: 20),
-                    ...p.availableCategories.map((c) => _SelectableRow(
-                          label: c,
-                          isSelected: p.selectedCategory == c,
-                          onTap: () => p.selectCategory(c),
-                        )),
+                    if (categoryProvider.isLoading)
+                      Center(child: CircularProgressIndicator(color: secondaryColor))
+                    else if (categoryProvider.categories.isEmpty)
+                      Center(
+                        child: Column(
+                          children: [
+                            Icon(Icons.category_outlined, size: 48, color: Colors.grey.shade400),
+                            const SizedBox(height: 12),
+                            Text(
+                              'No categories found',
+                              style: nunitoSans16w400.copyWith(color: Colors.grey.shade400),
+                            ),
+                          ],
+                        ),
+                      )
+                    else
+                      ...categoryProvider.categories.map((category) => _SelectableRow(
+                            label: category['name'] ?? 'Unknown',
+                            isSelected: storyProvider.selectedCategory == category['name'],
+                            onTap: () => storyProvider.selectCategory(category['name']),
+                          )),
                     const SizedBox(height: 24),
                     RoundButton(
                       text: 'Select',
-                      onPressed: () => Navigator.pop(context),
+                      onPressed: () => Navigator.pop(bottomSheetContext),
                     )
                   ],
                 );
@@ -116,7 +138,7 @@ class CategoryPicker extends StatelessWidget {
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
       ),
-      builder: (context) {
+      builder: (bottomSheetContext) {
         return Padding(
           padding: const EdgeInsets.fromLTRB(20, 12, 20, 24),
           child: Column(
@@ -158,10 +180,21 @@ class CategoryPicker extends StatelessWidget {
                 width: double.infinity,
                 height: 56,
                 child: ElevatedButton(
-                  onPressed: () {
-                    provider.addCategory(controller.text);
-                    Navigator.pop(context);
-                    _openSelectBottomSheet(context, provider);
+                  onPressed: () async {
+                    final categoryName = controller.text.trim();
+                    if (categoryName.isNotEmpty) {
+                      Navigator.pop(bottomSheetContext);
+                      
+                      final categoryProvider = CategoryProvider();
+                      final success = await categoryProvider.createCategory(categoryName);
+                      
+                      if (success) {
+                        provider.selectCategory(categoryName);
+                        showSuccessToast(context, 'Category created successfully');
+                      } else {
+                        showErrorToast(context, categoryProvider.errorMessage ?? 'Failed to create category');
+                      }
+                    }
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: secondaryColor,
