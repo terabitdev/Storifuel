@@ -15,6 +15,15 @@ class ProfileScreen extends StatelessWidget {
     return Scaffold(
       resizeToAvoidBottomInset: true,
       appBar: AppBar(
+        actions: [
+          IconButton(
+            icon: Icon(Icons.logout_outlined,color: secondaryColor,),
+            onPressed: () {
+              showLogoutDialog(context);
+            },
+          ),
+          SizedBox(width: 10),
+        ],
         backgroundColor: Colors.white,
         scrolledUnderElevation: 0,
         automaticallyImplyLeading: false, // removes back arrow
@@ -56,10 +65,6 @@ class ProfileScreen extends StatelessWidget {
               ProfileCustomTextField(label: "Email", hint: "Enter your email"),
               const SizedBox(height: 140),
               RoundButton(text: "Save", onPressed: () {}),
-              const SizedBox(height: 32),
-              RoundButton(text: "Logout", onPressed: () {
-                showLogoutDialog(context);
-              })
             ],
           ),
         ),
