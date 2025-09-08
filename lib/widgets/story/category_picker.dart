@@ -8,7 +8,6 @@ import 'package:storifuel/core/utils/toast.dart';
 import 'package:storifuel/view_model/story/story_provider.dart';
 import 'package:storifuel/view_model/category/category_provider.dart';
 import 'package:storifuel/widgets/common/round_button.dart';
-import 'package:storifuel/widgets/category/add_category_sheet.dart';
 
 class CategoryPicker extends StatelessWidget {
   const CategoryPicker({super.key});
