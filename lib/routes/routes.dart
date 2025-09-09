@@ -15,8 +15,6 @@ import 'package:storifuel/view/profile/profile_screen.dart';
 import 'package:storifuel/view/story/create_story_screen.dart';
 import 'package:storifuel/view/story_details/story_details_screen.dart';
 import 'package:storifuel/view_model/dashboard/dashboard_provider.dart';
-import 'package:storifuel/view_model/home/home_provider.dart';
-import 'package:storifuel/view_model/favourite/favourite_provider.dart';
 import 'package:storifuel/view_model/story/story_provider.dart';
 import 'package:storifuel/view_model/category/category_provider.dart';
 
@@ -63,10 +61,7 @@ class Routes {
         );
          case RoutesName.home:
         return MaterialPageRoute(
-          builder: (BuildContext context) => ChangeNotifierProvider(
-            create: (_) => HomeProvider(),
-            child: HomeScreen(),
-          ),
+          builder: (BuildContext context) => const HomeScreen(),
         );
       case RoutesName.category:
         return MaterialPageRoute(
@@ -77,10 +72,7 @@ class Routes {
         );
       case RoutesName.favourite:
         return MaterialPageRoute(
-          builder: (BuildContext context) => ChangeNotifierProvider(
-            create: (_) => FavouriteProvider(),
-            child: FavouriteScreen(),
-          ),
+          builder: (BuildContext context) => const FavouriteScreen(),
         );
       case RoutesName.profile:
         return MaterialPageRoute(

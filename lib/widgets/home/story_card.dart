@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:provider/provider.dart';
 import 'package:storifuel/core/constants/app_images.dart';
 import 'package:storifuel/core/theme/app_fonts.dart';
 import 'package:storifuel/models/story_model.dart';
 import 'package:storifuel/routes/routes_name.dart';
-import 'package:storifuel/view_model/home/home_provider.dart';
+import 'package:storifuel/services/firebase/story_service.dart';
 
 class StoryCard extends StatelessWidget {
   final StoryModel story;
@@ -89,20 +88,23 @@ class StoryCard extends StatelessWidget {
               Positioned(
                 top: 10,
                 left: 10,
-                child: Consumer<HomeProvider>(
-                  builder: (context, provider, _) {
-                    final isFavorited = provider.isStoryFavorited(story.id);
-                    return GestureDetector(
-                      onTap: () => provider.toggleFavorite(story.id),
-                      child: Center(
-                        child: SvgPicture.asset(
-                          isFavorited ? AppImages.favIcon : AppImages.nonFavIcon,
-                          height: 30,
-                          width: 30,
-                        ),
-                      ),
-                    );
+                child: GestureDetector(
+                  onTap: () async {
+                    try {
+                      await StoryService().toggleFavorite(story.id);
+                    } catch (e) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(content: Text('Error updating favorite: $e')),
+                      );
+                    }
                   },
+                  child: Center(
+                    child: SvgPicture.asset(
+                      story.isFavorited ? AppImages.favIcon : AppImages.nonFavIcon,
+                      height: 30,
+                      width: 30,
+                    ),
+                  ),
                 ),
               ),
             ],

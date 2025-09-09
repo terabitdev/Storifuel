@@ -115,7 +115,6 @@ class HomeProvider extends ChangeNotifier {
     _allStories = stories;
     _updateAvailableCategories();
     _applyFiltersAndSearch();
-    notifyListeners();
   }
 
   // Update available categories from user's actual stories

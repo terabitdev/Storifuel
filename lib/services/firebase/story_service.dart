@@ -302,4 +302,50 @@ class StoryService {
              story.category.toLowerCase().contains(lowercaseQuery);
     }).toList();
   }
+
+  // Toggle favorite status for a story
+  Future<void> toggleFavorite(String storyId) async {
+    try {
+      if (currentUserId == null) {
+        throw Exception('User not authenticated');
+      }
+
+      final docSnapshot = await _userStoriesDoc.get();
+      if (!docSnapshot.exists) return;
+
+      final data = docSnapshot.data() as Map<String, dynamic>;
+      final storiesArray = List<Map<String, dynamic>>.from(data['stories'] ?? []);
+
+      final storyIndex = storiesArray.indexWhere((story) => story['id'] == storyId);
+      if (storyIndex != -1) {
+        final currentStory = StoryModel.fromMap(storiesArray[storyIndex]);
+        
+        // Toggle favorite status
+        final updatedStory = currentStory.copyWith(
+          isFavorited: !currentStory.isFavorited,
+          updatedAt: DateTime.now(),
+        );
+
+        storiesArray[storyIndex] = updatedStory.toMap();
+
+        await _userStoriesDoc.update({
+          'stories': storiesArray,
+        });
+      }
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  // Get only favorited stories
+  Future<List<StoryModel>> getFavoriteStories() async {
+    final allStories = await getStoriesOnce();
+    return allStories.where((story) => story.isFavorited).toList();
+  }
+
+  // Stream of only favorited stories
+  Stream<List<StoryModel>> getFavoriteStoriesStream() {
+    return getStories().map((stories) => 
+      stories.where((story) => story.isFavorited).toList());
+  }
 }

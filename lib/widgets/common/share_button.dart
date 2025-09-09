@@ -14,28 +14,31 @@ class ShareButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      decoration: BoxDecoration(
-        color: secondaryColor,
-        borderRadius: BorderRadius.circular(8),
-      ),
-      width: double.infinity,
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 12.0),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Text(
-              'Share',
-              style: poppins16w600.copyWith(color: Colors.white),
-            ),
-            const SizedBox(width: 8),
-            SvgPicture.asset(
-              AppImages.shareIcon,
-              height: 20,
-              width: 20,
-            ),
-          ],
+    return GestureDetector(
+      onTap: onPressed,
+      child: Container(
+        decoration: BoxDecoration(
+          color: secondaryColor,
+          borderRadius: BorderRadius.circular(8),
+        ),
+        width: double.infinity,
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 12.0),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text(
+                'Share',
+                style: poppins16w600.copyWith(color: Colors.white),
+              ),
+              const SizedBox(width: 8),
+              SvgPicture.asset(
+                AppImages.shareIcon,
+                height: 20,
+                width: 20,
+              ),
+            ],
+          ),
         ),
       ),
     );

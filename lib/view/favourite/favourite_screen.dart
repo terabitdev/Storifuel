@@ -1,13 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:provider/provider.dart';
 import 'package:storifuel/core/constants/app_colors.dart';
 import 'package:storifuel/core/constants/app_images.dart';
 import 'package:storifuel/core/theme/app_fonts.dart';
 import 'package:storifuel/core/theme/app_responsiveness.dart';
+import 'package:storifuel/models/story_model.dart';
 import 'package:storifuel/routes/routes_name.dart';
-import 'package:storifuel/view_model/favourite/favourite_provider.dart';
-import 'package:storifuel/view_model/home/home_provider.dart';
+import 'package:storifuel/services/firebase/story_service.dart';
 import 'package:storifuel/widgets/home/story_card.dart';
 
 class FavouriteScreen extends StatelessWidget {
@@ -37,14 +36,20 @@ class FavouriteScreen extends StatelessWidget {
               Text("Favourite", style: poppins18w600),
               const SizedBox(height: 12),
               Expanded(
-                child: Consumer2<FavouriteProvider, HomeProvider>(
-                  builder: (context, favouriteProvider, homeProvider, _) {
-                    final allStories = homeProvider.allStories;
+                child: StreamBuilder<List<StoryModel>>(
+                  stream: StoryService().getFavoriteStoriesStream(),
+                  builder: (context, snapshot) {
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return const Center(child: CircularProgressIndicator());
+                    }
                     
-                    // Filter stories to show only favorited ones
-                    final favoritedStories = allStories
-                        .where((story) => favouriteProvider.isStoryFavorited(story.id))
-                        .toList();
+                    if (snapshot.hasError) {
+                      return Center(
+                        child: Text('Error: ${snapshot.error}'),
+                      );
+                    }
+                    
+                    final favoritedStories = snapshot.data ?? [];
 
                     if (favoritedStories.isEmpty) {
                       return _buildEmptyState();

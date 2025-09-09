@@ -7,6 +7,7 @@ class StoryModel {
   final String category;
   final String? imageUrl;
   final String? voiceUrl;
+  final bool isFavorited;
   final DateTime createdAt;
   final DateTime updatedAt;
 
@@ -17,6 +18,7 @@ class StoryModel {
     required this.category,
     this.imageUrl,
     this.voiceUrl,
+    this.isFavorited = false,
     required this.createdAt,
     required this.updatedAt,
   });
@@ -30,6 +32,7 @@ class StoryModel {
       'category': category,
       'imageUrl': imageUrl,
       'voiceUrl': voiceUrl,
+      'isFavorited': isFavorited,
       'createdAt': Timestamp.fromDate(createdAt),
       'updatedAt': Timestamp.fromDate(updatedAt),
     };
@@ -44,6 +47,7 @@ class StoryModel {
       category: map['category'] ?? '',
       imageUrl: map['imageUrl'],
       voiceUrl: map['voiceUrl'],
+      isFavorited: map['isFavorited'] ?? false,
       createdAt: (map['createdAt'] as Timestamp?)?.toDate() ?? DateTime.now(),
       updatedAt: (map['updatedAt'] as Timestamp?)?.toDate() ?? DateTime.now(),
     );
@@ -57,6 +61,7 @@ class StoryModel {
     String? category,
     String? imageUrl,
     String? voiceUrl,
+    bool? isFavorited,
     DateTime? createdAt,
     DateTime? updatedAt,
   }) {
@@ -67,6 +72,7 @@ class StoryModel {
       category: category ?? this.category,
       imageUrl: imageUrl ?? this.imageUrl,
       voiceUrl: voiceUrl ?? this.voiceUrl,
+      isFavorited: isFavorited ?? this.isFavorited,
       createdAt: createdAt ?? this.createdAt,
       updatedAt: updatedAt ?? this.updatedAt,
     );

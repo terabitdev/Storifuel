@@ -86,12 +86,11 @@ class HomeScreen extends StatelessWidget {
                         
                         final allStories = snapshot.data ?? [];
                         
-                        // Extract categories from stories for the filter
-                        final categories = allStories.map((story) => story.category).toSet().toList()..sort();
-                        if (provider.availableCategories.length != categories.length || 
-                            !provider.availableCategories.every((cat) => categories.contains(cat))) {
+                        // Update stories in provider for sharing with other screens
+                        if (provider.allStories.length != allStories.length || 
+                            !provider.allStories.every((story) => allStories.any((s) => s.id == story.id))) {
                           WidgetsBinding.instance.addPostFrameCallback((_) {
-                            provider.updateAvailableCategories(categories);
+                            provider.updateStories(allStories);
                           });
                         }
                         
