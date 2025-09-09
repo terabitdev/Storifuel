@@ -24,11 +24,14 @@ class _CategoryScreenState extends State<CategoryScreen> {
       initialText: currentName,
     ).then((result) async {
       if (result != null && result.isNotEmpty) {
+        // ignore: use_build_context_synchronously
         final categoryProvider = context.read<CategoryProvider>();
         final success = await categoryProvider.updateCategory(categoryId, result);
         if (success) {
+          // ignore: use_build_context_synchronously
           showSuccessToast(context, 'Category updated successfully');
         } else {
+          // ignore: use_build_context_synchronously
           showErrorToast(context, categoryProvider.errorMessage ?? 'Failed to update category');
         }
       }
@@ -41,19 +44,22 @@ class _CategoryScreenState extends State<CategoryScreen> {
       initialText: "",
     ).then((result) async {
       if (result != null && result.isNotEmpty) {
+        // ignore: use_build_context_synchronously
         final categoryProvider = context.read<CategoryProvider>();
         
         // Check if category already exists
         if (categoryProvider.categoryExists(result)) {
+          // ignore: use_build_context_synchronously
           showInfoToast(context, 'Category already exists', 'Please choose a different name');
           return;
         }
         
         final success = await categoryProvider.createCategory(result);
         if (success) {
+          // ignore: use_build_context_synchronously
           showSuccessToast(context, 'Category created successfully');
         } else {
-          print('Error: ${categoryProvider.errorMessage}');
+          // ignore: use_build_context_synchronously
           showErrorToast(context, categoryProvider.errorMessage ?? 'Failed to create category');
         }
       }

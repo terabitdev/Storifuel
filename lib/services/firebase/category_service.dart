@@ -101,8 +101,6 @@ class CategoryService {
       if (currentUserId == null) {
         throw Exception('User not authenticated');
       }
-
-      print('Deleting category with ID: $categoryId for user: $currentUserId');
       
       // Get current categories
       final docSnapshot = await _userCategoriesDoc.get();
@@ -119,9 +117,7 @@ class CategoryService {
         'categories': categoriesArray,
       });
       
-      print('Category deleted successfully');
     } catch (e) {
-      print('Error deleting category: $e');
       rethrow;
     }
   }

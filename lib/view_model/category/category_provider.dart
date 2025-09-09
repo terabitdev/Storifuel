@@ -95,15 +95,12 @@ class CategoryProvider extends ChangeNotifier {
   // Delete a category
   Future<bool> deleteCategory(String categoryId) async {
     try {
-      print('CategoryProvider: Starting delete for category ID: $categoryId');
       _setLoading(true);
       _setError(null);
       
       await _categoryService.deleteCategory(categoryId);
-      print('CategoryProvider: Delete successful');
       return true;
     } catch (e) {
-      print('CategoryProvider: Delete failed with error: $e');
       _setError('Failed to delete category: $e');
       return false;
     } finally {

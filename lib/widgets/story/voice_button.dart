@@ -28,14 +28,12 @@ class _VoiceButtonState extends State<VoiceButton> {
     try {
       _isInitialized = await _speech.initialize(
         onStatus: (status) {
-          print('Speech status: $status');
           if (mounted && (status == 'done' || status == 'notListening')) {
             final provider = context.read<StoryProvider>();
             provider.setListening(false);
           }
         },
         onError: (error) {
-          print('Speech error: $error');
           if (mounted) {
             final provider = context.read<StoryProvider>();
             provider.setListening(false);
@@ -45,13 +43,10 @@ class _VoiceButtonState extends State<VoiceButton> {
         debugLogging: true,
       );
       
-      print('Speech initialized: $_isInitialized');
-      
       if (!_isInitialized && mounted) {
         showErrorToast(context, 'Speech recognition not available. Please check microphone permissions.');
       }
     } catch (e) {
-      print('Failed to initialize speech: $e');
       _isInitialized = false;
     }
   }
@@ -100,12 +95,12 @@ class _VoiceButtonState extends State<VoiceButton> {
   }
 
   void _toggleListening(StoryProvider provider) async {
-    print('Toggle listening called. Initialized: $_isInitialized, isListening: ${provider.isListening}');
     
     if (!_isInitialized) {
       // Try to initialize again
       await _initializeSpeech();
       if (!_isInitialized) {
+        // ignore: use_build_context_synchronously
         showErrorToast(context, 'Speech recognition is not available');
         return;
       }
@@ -113,10 +108,10 @@ class _VoiceButtonState extends State<VoiceButton> {
 
     if (!provider.isListening) {
       // Check if speech is available before starting
-      bool available = await _speech.isAvailable;
-      print('Speech available: $available');
+      bool available = _speech.isAvailable;
       
       if (!available) {
+        // ignore: use_build_context_synchronously
         showErrorToast(context, 'Microphone not available. Please check permissions.');
         return;
       }
@@ -126,7 +121,6 @@ class _VoiceButtonState extends State<VoiceButton> {
       try {
         await _speech.listen(
           onResult: (result) {
-            print('Result: ${result.recognizedWords}, Final: ${result.finalResult}');
             if (result.recognizedWords.isNotEmpty) {
               // Append to existing text instead of replacing
               String currentText = provider.storyController.text;
@@ -142,18 +136,16 @@ class _VoiceButtonState extends State<VoiceButton> {
               }
             }
           },
-          listenFor: const Duration(seconds: 30),
+          listenFor: const Duration(seconds: 120),
           pauseFor: const Duration(seconds: 3),
           localeId: 'en_US', // Specify locale
         );
-        print('Started listening successfully');
       } catch (e) {
-        print('Error starting speech recognition: $e');
         provider.setListening(false);
+        // ignore: use_build_context_synchronously
         showErrorToast(context, 'Failed to start listening: $e');
       }
     } else {
-      print('Stopping speech recognition');
       await _speech.stop();
       provider.setListening(false);
     }

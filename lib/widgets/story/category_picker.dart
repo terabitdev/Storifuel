@@ -189,8 +189,10 @@ class CategoryPicker extends StatelessWidget {
                       
                       if (success) {
                         provider.selectCategory(categoryName);
+                        // ignore: use_build_context_synchronously
                         showSuccessToast(context, 'Category created successfully');
                       } else {
+                        // ignore: use_build_context_synchronously
                         showErrorToast(context, categoryProvider.errorMessage ?? 'Failed to create category');
                       }
                     }
