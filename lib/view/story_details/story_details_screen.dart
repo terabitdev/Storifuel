@@ -117,27 +117,6 @@ class StoryDetailsScreen extends StatelessWidget {
                   ),
                   const SizedBox(height: 24),
                   Text(
-                    'Popular Tags',
-                    style: poppins16w600.copyWith(color: Colors.black),
-                  ),
-                  const SizedBox(height: 12),
-                  Wrap(
-                    spacing: 8,
-                    runSpacing: 8,
-                    children: tags.map((tag) => Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-                      decoration: BoxDecoration(
-                        border: Border.all(color: Colors.grey.shade300),
-                        borderRadius: BorderRadius.circular(16),
-                      ),
-                      child: Text(
-                        tag,
-                        style: nunito14w500.copyWith(color: Colors.grey.shade600),
-                      ),
-                    )).toList(),
-                  ),
-                  const SizedBox(height: 24),
-                  Text(
                     content,
                     style: nunito14w500.copyWith(
                       color: Colors.black87,
