@@ -5,8 +5,11 @@ import 'package:storifuel/core/constants/app_colors.dart';
 import 'package:storifuel/core/constants/app_images.dart';
 import 'package:storifuel/core/theme/app_fonts.dart';
 import 'package:storifuel/core/theme/app_responsiveness.dart';
+import 'package:storifuel/models/story_model.dart';
+import 'package:storifuel/routes/routes_name.dart';
 import 'package:storifuel/view_model/home/home_provider.dart';
 import 'package:storifuel/widgets/common/round_button.dart';
+import 'package:storifuel/widgets/home/empty_state_widget.dart';
 import 'package:storifuel/widgets/home/search_field.dart';
 import 'package:storifuel/widgets/home/story_card.dart';
 
@@ -17,39 +20,13 @@ class HomeScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final TextEditingController searchController = TextEditingController();
 
-    // Mock data for now (replace with API/Firebase later)
-    final List<Map<String, String>> stories = [
-      {
-        "id": "story_1",
-        "image": AppImages.story,
-        "title": "Bitcoin Bull Run 'May Not Happen Until 2025",
-        "description":
-            "Bitcoin is a crypto asset that is a reference for various altcoins that have currently been launched, so its price movements are an important...",
-        "timeAgo": "3h ago",
-      },
-      {
-        "id": "story_2",
-        "image": AppImages.story,
-        "title": "An Evening Walk Under the Gentle Rain",
-        "description":
-            "Last night, I went out for a walk while the rain gently poured down. The streets were quiet, and the sound of raindrops on the rooftops made everything feel peaceful...",
-        "timeAgo": "3h ago",
-      },
-      {
-        "id": "story_3",
-        "image": AppImages.story,
-        "title": "My Daughter's First Day at School",
-        "description":
-            "The day started with a mix of joy and nervousness as I held my daughter's tiny hand and walked her into her classroom...",
-        "timeAgo": "3h ago",
-      },
-    ];
-
     return Scaffold(
       floatingActionButton: FloatingActionButton(
         shape: const CircleBorder(),
         backgroundColor: secondaryColor,
-        onPressed: () {},
+        onPressed: () {
+          Navigator.pushNamed(context, RoutesName.createStory);
+        },
         child: SvgPicture.asset(AppImages.plusIcon),
       ),
       body: SafeArea(
@@ -86,16 +63,38 @@ class HomeScreen extends StatelessWidget {
               Text("Recently", style: poppins18w600),
               const SizedBox(height: 12),
               Expanded(
-                child: ListView.builder(
-                  itemCount: stories.length,
-                  itemBuilder: (context, index) {
-                    final story = stories[index];
-                    return StoryCard(
-                      storyId: story["id"]!,
-                      image: story["image"]!,
-                      title: story["title"]!,
-                      description: story["description"]!,
-                      timeAgo: story["timeAgo"]!,
+                child: StreamBuilder<List<StoryModel>>(
+                  stream: context.read<HomeProvider>().getStoriesStream(),
+                  builder: (context, snapshot) {
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return const Center(child: CircularProgressIndicator());
+                    }
+                    
+                    if (snapshot.hasError) {
+                      return Center(
+                        child: Text('Error: ${snapshot.error}'),
+                      );
+                    }
+                    
+                    final stories = snapshot.data ?? [];
+                    context.read<HomeProvider>().updateStories(stories);
+                    
+                    if (stories.isEmpty) {
+                      return EmptyStateWidget(
+                        title: 'No Stories Yet',
+                        description: 'Start sharing your thoughts and experiences by creating your first story!',
+                        actionText: 'Create Story',
+                        onAction: () {
+                          Navigator.pushNamed(context, RoutesName.createStory);
+                        },
+                      );
+                    }
+                    
+                    return ListView.builder(
+                      itemCount: stories.length,
+                      itemBuilder: (context, index) {
+                        return StoryCard(story: stories[index]);
+                      },
                     );
                   },
                 ),

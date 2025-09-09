@@ -71,7 +71,7 @@ class _MediaUploaderState extends State<MediaUploader> {
       child: Container(
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(12),
-          color: Colors.black,
+          color: Colors.black.withOpacity(0.3),
         ),
         child: Stack(
           children: [
@@ -87,7 +87,7 @@ class _MediaUploaderState extends State<MediaUploader> {
                     shape: BoxShape.circle,
                     boxShadow: [
                       BoxShadow(
-                        color: Colors.black,
+                        color: Colors.black.withOpacity(0.2),
                         blurRadius: 4,
                         offset: const Offset(0, 2),
                       ),
@@ -200,7 +200,7 @@ class _MediaUploaderState extends State<MediaUploader> {
         widget.onImageSelected?.call(_selectedImage);
       }
     } catch (e) {
-      // Handle any errors here
+      print('Error picking image: $e');
     }
   }
 }

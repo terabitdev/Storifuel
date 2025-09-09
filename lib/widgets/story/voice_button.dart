@@ -122,16 +122,9 @@ class _VoiceButtonState extends State<VoiceButton> {
         await _speech.listen(
           onResult: (result) {
             if (result.recognizedWords.isNotEmpty) {
-              // Append to existing text instead of replacing
-              String currentText = provider.storyController.text;
-              if (result.finalResult && currentText.isNotEmpty) {
-                provider.storyController.text = '$currentText ${result.recognizedWords}';
-              } else if (result.finalResult || currentText.isEmpty) {
-                provider.storyController.text = result.recognizedWords;
-              }
-              
-              // If this is the final result, stop listening
               if (result.finalResult) {
+                // Use the provider's method to append text
+                provider.appendToStory(result.recognizedWords);
                 provider.setListening(false);
               }
             }

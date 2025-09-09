@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:storifuel/core/constants/app_colors.dart';
 import 'package:storifuel/core/constants/app_images.dart';
 import 'package:storifuel/core/theme/app_fonts.dart';
+import 'package:storifuel/core/utils/toast.dart';
 import 'package:storifuel/view_model/story/story_provider.dart';
 import 'package:storifuel/widgets/common/round_button.dart';
 import 'package:storifuel/widgets/story/category_picker.dart';
@@ -51,7 +52,17 @@ class CreateStoryScreen extends StatelessWidget {
                     const SizedBox(height: 24),
                     const CategoryPicker(),
                     const SizedBox(height: 28),
-                    RoundButton(text: 'Publish', onPressed: () {}),
+                    Consumer<StoryProvider>(
+                      builder: (context, provider, _) {
+                        return RoundButton(
+                          text: 'Publish',
+                          isLoading: provider.isPublishing,
+                          onPressed: provider.isPublishing
+                              ? null
+                              : () => _publishStory(context, provider),
+                        );
+                      },
+                    ),
                     const SizedBox(height: 20),
                   ],
                 ),
@@ -61,5 +72,21 @@ class CreateStoryScreen extends StatelessWidget {
         },
       ),
     );
+  }
+
+  Future<void> _publishStory(BuildContext context, StoryProvider provider) async {
+    try {
+      final success = await provider.publishStory();
+      if (success && context.mounted) {
+        showSuccessToast(context, 'Story published successfully!');
+        // Clear the form after successful navigation
+        provider.clear();
+        Navigator.pop(context); // Navigate back to previous screen (likely home)
+      }
+    } catch (e) {
+      if (context.mounted) {
+        showSuccessToast(context, 'Failed to publish story: $e');
+      }
+    }
   }
 }
