@@ -2,10 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:storifuel/core/constants/app_images.dart';
 import 'package:storifuel/core/theme/app_fonts.dart';
+import 'package:storifuel/core/utils/toast.dart';
+import 'package:storifuel/models/story_model.dart';
 import 'package:storifuel/services/firebase/story_service.dart';
+import 'package:storifuel/services/pdf/pdf_service.dart';
+import 'package:storifuel/widgets/common/pdf_progress_dialog.dart';
 import 'package:storifuel/widgets/story_details/story_options_popup.dart';
 
-class StoryDetailsScreen extends StatelessWidget {
+class StoryDetailsScreen extends StatefulWidget {
   final String storyId;
   final String image;
   final String title;
@@ -26,6 +30,59 @@ class StoryDetailsScreen extends StatelessWidget {
   });
 
   @override
+  State<StoryDetailsScreen> createState() => _StoryDetailsScreenState();
+}
+
+class _StoryDetailsScreenState extends State<StoryDetailsScreen> {
+  
+  /// Exports the story to PDF with progress dialog
+  Future<void> _exportToPDF(BuildContext context, StoryModel story) async {
+    try {
+      // Show progress dialog
+      PDFProgressDialog.show(
+        context, 
+        message: 'Preparing your story...',
+      );
+
+      // Simulate some initial processing time
+      await Future.delayed(const Duration(milliseconds: 500));
+      
+      // Update progress
+      PDFProgressDialog.update(
+        // ignore: use_build_context_synchronously
+        context, 
+        message: 'Generating PDF document...',
+      );
+
+      // Generate the PDF
+      final String? filePath = await PDFService.generateStoryPDF(story);
+      
+      // Hide progress dialog
+      // ignore: use_build_context_synchronously
+      PDFProgressDialog.hide(context);
+
+      if (filePath != null) {
+        // Show success toast
+        // ignore: use_build_context_synchronously
+        print(filePath);
+        showSuccessToast(context, 'PDF Generated Successfully!');
+      } else {
+        // Show error toast
+        // ignore: use_build_context_synchronously
+        showErrorToast(context, 'PDF Generation Failed', );
+      }
+    } catch (e) {
+      // Hide progress dialog if still showing
+      // ignore: use_build_context_synchronously
+      PDFProgressDialog.hide(context);
+      
+      // Show error toast
+      // ignore: use_build_context_synchronously
+      showErrorToast(context, 'Error: $e');
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
@@ -42,7 +99,7 @@ class StoryDetailsScreen extends StatelessWidget {
 
           final stories = snapshot.data ?? [];
           final currentStory = stories.firstWhere(
-            (story) => story.id == storyId,
+            (story) => story.id == widget.storyId,
             orElse: () => throw Exception('Story not found'),
           );
 
@@ -58,9 +115,9 @@ class StoryDetailsScreen extends StatelessWidget {
                           Container(
                             height: MediaQuery.of(context).size.height * 0.4,
                             width: double.infinity,
-                            child: image.startsWith('http')
+                            child: widget.image.startsWith('http')
                                 ? Image.network(
-                                    image,
+                                    widget.image,
                                     fit: BoxFit.cover,
                                     loadingBuilder:
                                         (context, child, loadingProgress) {
@@ -81,7 +138,7 @@ class StoryDetailsScreen extends StatelessWidget {
                                       );
                                     },
                                   )
-                                : Image.asset(image, fit: BoxFit.cover),
+                                : Image.asset(widget.image, fit: BoxFit.cover),
                           ),
                           Positioned(
                             top: MediaQuery.of(context).padding.top + 10,
@@ -105,7 +162,7 @@ class StoryDetailsScreen extends StatelessWidget {
                                   onTap: () async {
                                     try {
                                       await StoryService().toggleFavorite(
-                                        storyId,
+                                        widget.storyId,
                                       );
                                     } catch (e) {
                                       ScaffoldMessenger.of(
@@ -133,7 +190,7 @@ class StoryDetailsScreen extends StatelessWidget {
                                     StoryOptionsPopup.show(
                                       context,
                                       onEdit: () {},
-                                      onExportPDF: () {},
+                                      onExportPDF: () => _exportToPDF(context, currentStory),
                                     );
                                   },
                                   child: SvgPicture.asset(
@@ -154,7 +211,7 @@ class StoryDetailsScreen extends StatelessWidget {
                           children: [
                             // Title
                             Text(
-                              title,
+                              widget.title,
                               style: poppins22w600.copyWith(
                                 color: Colors.black,
                               ),
@@ -163,7 +220,7 @@ class StoryDetailsScreen extends StatelessWidget {
                             Row(
                               children: [
                                 Text(
-                                  category,
+                                  widget.category,
                                   style: nunito14w500.copyWith(
                                     color: const Color(0xFF4CAF50),
                                   ),
@@ -177,7 +234,7 @@ class StoryDetailsScreen extends StatelessWidget {
                                 ),
                                 const SizedBox(width: 8),
                                 Text(
-                                  timeAgo,
+                                  widget.timeAgo,
                                   style: poppins14w400.copyWith(
                                     color: Colors.grey,
                                   ),
@@ -186,7 +243,7 @@ class StoryDetailsScreen extends StatelessWidget {
                             ),
                             const SizedBox(height: 24),
                             Text(
-                              content,
+                              widget.content,
                               style: nunito14w500.copyWith(
                                 color: Colors.black87,
                                 height: 1.6,
