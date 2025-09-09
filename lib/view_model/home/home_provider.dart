@@ -4,17 +4,25 @@ import 'package:storifuel/services/firebase/story_service.dart';
 
 class HomeProvider extends ChangeNotifier {
   final List<String> _selectedCategories = [];
-  final List<String> _availableCategories = ['Business', 'Crypto', 'Technology', 'Gaming'];
+  List<String> _availableCategories = [];
   final Set<String> _favoritedStories = <String>{};
   final StoryService _storyService = StoryService();
   
   List<StoryModel> _allStories = [];
+  List<StoryModel> _filteredStories = [];
+  List<String> _filteredCategories = [];
+  String _searchQuery = '';
+  String _categorySearchQuery = '';
   bool _isLoading = false;
 
   List<String> get selectedCategories => List.unmodifiable(_selectedCategories);
-  List<String> get availableCategories => List.unmodifiable(_availableCategories);
+  List<String> get availableCategories => _categorySearchQuery.isEmpty 
+      ? List.unmodifiable(_availableCategories) 
+      : List.unmodifiable(_filteredCategories);
   Set<String> get favoritedStories => Set.unmodifiable(_favoritedStories);
   List<StoryModel> get allStories => List.unmodifiable(_allStories);
+  List<StoryModel> get filteredStories => List.unmodifiable(_filteredStories);
+  String get searchQuery => _searchQuery;
   bool get isLoading => _isLoading;
 
   // Filter management methods
@@ -24,11 +32,13 @@ class HomeProvider extends ChangeNotifier {
     } else {
       _selectedCategories.add(category);
     }
+    _applyFiltersAndSearch();
     notifyListeners();
   }
 
   void clearFilters() {
     _selectedCategories.clear();
+    _applyFiltersAndSearch();
     notifyListeners();
   }
 
@@ -103,6 +113,80 @@ class HomeProvider extends ChangeNotifier {
 
   void updateStories(List<StoryModel> stories) {
     _allStories = stories;
+    _updateAvailableCategories();
+    _applyFiltersAndSearch();
+    notifyListeners();
+  }
+
+  // Update available categories from user's actual stories
+  void _updateAvailableCategories() {
+    final categories = _allStories.map((story) => story.category).toSet().toList();
+    categories.sort(); // Sort alphabetically
+    _availableCategories = categories;
+    _filterCategoriesBySearch();
+  }
+
+  // Public method to update only categories without full rebuild
+  void updateAvailableCategories(List<String> categories) {
+    _availableCategories = categories;
+    _filterCategoriesBySearch();
+    notifyListeners();
+  }
+
+  // Main search functionality for stories
+  void updateSearchQuery(String query) {
+    _searchQuery = query.trim();
+    _applyFiltersAndSearch();
+    notifyListeners();
+  }
+
+  // Search functionality for categories in bottom sheet
+  void updateCategorySearchQuery(String query) {
+    _categorySearchQuery = query.trim();
+    _filterCategoriesBySearch();
+    notifyListeners();
+  }
+
+  // Filter categories based on search query
+  void _filterCategoriesBySearch() {
+    if (_categorySearchQuery.isEmpty) {
+      _filteredCategories = List.from(_availableCategories);
+    } else {
+      final lowercaseQuery = _categorySearchQuery.toLowerCase();
+      _filteredCategories = _availableCategories
+          .where((category) => category.toLowerCase().contains(lowercaseQuery))
+          .toList();
+    }
+  }
+
+  // Apply both category filters and search query
+  void _applyFiltersAndSearch() {
+    List<StoryModel> result = List.from(_allStories);
+
+    // Apply category filter
+    if (_selectedCategories.isNotEmpty) {
+      result = result.where((story) => _selectedCategories.contains(story.category)).toList();
+    }
+
+    // Apply search query
+    if (_searchQuery.isNotEmpty) {
+      final lowercaseQuery = _searchQuery.toLowerCase();
+      result = result.where((story) {
+        return story.title.toLowerCase().contains(lowercaseQuery) ||
+               story.description.toLowerCase().contains(lowercaseQuery) ||
+               story.category.toLowerCase().contains(lowercaseQuery);
+      }).toList();
+    }
+
+    _filteredStories = result;
+  }
+
+  // Clear all filters and search
+  void clearAllFilters() {
+    _selectedCategories.clear();
+    _searchQuery = '';
+    _categorySearchQuery = '';
+    _applyFiltersAndSearch();
     notifyListeners();
   }
 }

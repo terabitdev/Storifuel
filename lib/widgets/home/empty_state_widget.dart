@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:storifuel/core/constants/app_images.dart';
 import 'package:storifuel/core/theme/app_fonts.dart';
 
 class EmptyStateWidget extends StatelessWidget {
@@ -22,13 +21,6 @@ class EmptyStateWidget extends StatelessWidget {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Image.asset(
-            AppImages.logo1,
-            width: 120,
-            height: 120,
-            opacity: const AlwaysStoppedAnimation(0.5),
-          ),
-          const SizedBox(height: 24),
           Text(
             title,
             style: nunitoSans18w700.copyWith(
@@ -47,19 +39,6 @@ class EmptyStateWidget extends StatelessWidget {
               textAlign: TextAlign.center,
             ),
           ),
-          if (actionText != null && onAction != null) ...[
-            const SizedBox(height: 24),
-            ElevatedButton(
-              onPressed: onAction,
-              style: ElevatedButton.styleFrom(
-                padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(8),
-                ),
-              ),
-              child: Text(actionText!),
-            ),
-          ],
         ],
       ),
     );

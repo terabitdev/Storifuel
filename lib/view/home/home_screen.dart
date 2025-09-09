@@ -55,45 +55,91 @@ class HomeScreen extends StatelessWidget {
                 ),
               ),
               const SizedBox(height: 20),
-              SearchWidget(
-                controller: searchController,
-                onFilterTap: () => _showFilterBottomSheet(context),
+              Consumer<HomeProvider>(
+                builder: (context, provider, _) {
+                  return SearchWidget(
+                    controller: searchController,
+                    onFilterTap: () => _showFilterBottomSheet(context),
+                    onChanged: (value) => provider.updateSearchQuery(value),
+                    onSubmitted: (value) => provider.updateSearchQuery(value),
+                  );
+                },
               ),
               const SizedBox(height: 20),
               Text("Recently", style: poppins18w600),
               const SizedBox(height: 12),
               Expanded(
-                child: StreamBuilder<List<StoryModel>>(
-                  stream: context.read<HomeProvider>().getStoriesStream(),
-                  builder: (context, snapshot) {
-                    if (snapshot.connectionState == ConnectionState.waiting) {
-                      return const Center(child: CircularProgressIndicator());
-                    }
-                    
-                    if (snapshot.hasError) {
-                      return Center(
-                        child: Text('Error: ${snapshot.error}'),
-                      );
-                    }
-                    
-                    final stories = snapshot.data ?? [];
-                    context.read<HomeProvider>().updateStories(stories);
-                    
-                    if (stories.isEmpty) {
-                      return EmptyStateWidget(
-                        title: 'No Stories Yet',
-                        description: 'Start sharing your thoughts and experiences by creating your first story!',
-                        actionText: 'Create Story',
-                        onAction: () {
-                          Navigator.pushNamed(context, RoutesName.createStory);
-                        },
-                      );
-                    }
-                    
-                    return ListView.builder(
-                      itemCount: stories.length,
-                      itemBuilder: (context, index) {
-                        return StoryCard(story: stories[index]);
+                child: Consumer<HomeProvider>(
+                  builder: (context, provider, _) {
+                    return StreamBuilder<List<StoryModel>>(
+                      stream: provider.getStoriesStream(),
+                      builder: (context, snapshot) {
+                        if (snapshot.connectionState == ConnectionState.waiting) {
+                          return const Center(child: CircularProgressIndicator());
+                        }
+                        
+                        if (snapshot.hasError) {
+                          return Center(
+                            child: Text('Error: ${snapshot.error}'),
+                          );
+                        }
+                        
+                        final allStories = snapshot.data ?? [];
+                        
+                        // Extract categories from stories for the filter
+                        final categories = allStories.map((story) => story.category).toSet().toList()..sort();
+                        if (provider.availableCategories.length != categories.length || 
+                            !provider.availableCategories.every((cat) => categories.contains(cat))) {
+                          WidgetsBinding.instance.addPostFrameCallback((_) {
+                            provider.updateAvailableCategories(categories);
+                          });
+                        }
+                        
+                        // Filter stories based on search and selected categories
+                        List<StoryModel> displayStories = allStories;
+                        
+                        // Apply category filter
+                        if (provider.selectedCategories.isNotEmpty) {
+                          displayStories = displayStories.where((story) => 
+                            provider.selectedCategories.contains(story.category)
+                          ).toList();
+                        }
+                        
+                        // Apply search filter
+                        if (provider.searchQuery.isNotEmpty) {
+                          final lowercaseQuery = provider.searchQuery.toLowerCase();
+                          displayStories = displayStories.where((story) {
+                            return story.title.toLowerCase().contains(lowercaseQuery) ||
+                                   story.description.toLowerCase().contains(lowercaseQuery) ||
+                                   story.category.toLowerCase().contains(lowercaseQuery);
+                          }).toList();
+                        }
+                        
+                        if (allStories.isEmpty) {
+                          return EmptyStateWidget(
+                            title: 'No Stories Yet',
+                            description: 'Start sharing your thoughts and experiences by creating your first story!',
+                          );
+                        }
+                        
+                        if (displayStories.isEmpty && (provider.searchQuery.isNotEmpty || provider.selectedCategories.isNotEmpty)) {
+                          return EmptyStateWidget(
+                            title: 'No Stories Found',
+                            description: 'No stories match your search criteria. Try adjusting your filters or search terms.',
+                            actionText: 'Clear Filters',
+                            onAction: () {
+                              searchController.clear();
+                              provider.clearAllFilters();
+                            },
+                          );
+                        }
+                        
+                        return ListView.builder(
+                          itemCount: displayStories.length,
+                          itemBuilder: (context, index) {
+                            return StoryCard(story: displayStories[index]);
+                          },
+                        );
                       },
                     );
                   },
@@ -107,7 +153,6 @@ class HomeScreen extends StatelessWidget {
   }
 
   void _showFilterBottomSheet(BuildContext context) {
-    final TextEditingController searchController = TextEditingController();
     final homeProvider = Provider.of<HomeProvider>(context, listen: false);
 
     showModalBottomSheet(
@@ -141,49 +186,41 @@ class HomeScreen extends StatelessWidget {
                       ),
                       Center(
                         child: Text(
-                          'Filter Categories',
+                          'Select Category',
                           style: nunitoSans16w700.copyWith(
                             color: const Color(0xFF0F182E),
                           ),
                         ),
                       ),
                       const SizedBox(height: 20),
-                      Container(
-                        height: 48,
-                        decoration: BoxDecoration(
-                          color: const Color(0xFFF5F5F5),
-                          borderRadius: BorderRadius.circular(12),
-                        ),
-                        child: TextField(
-                          controller: searchController,
-                          decoration: InputDecoration(
-                            contentPadding: const EdgeInsets.symmetric(
-                              vertical: 14,
+                      provider.availableCategories.isEmpty
+                        ? Padding(
+                            padding: const EdgeInsets.symmetric(vertical: 20),
+                            child: Center(
+                              child: Text(
+                                'No categories found',
+                                style: outfit14w400.copyWith(color: Colors.grey),
+                              ),
                             ),
-                            border: InputBorder.none,
-                            prefixIcon: Padding(
-                              padding: const EdgeInsets.all(12.0),
-                              child: SvgPicture.asset(AppImages.searchIcon),
-                            ),
-                            hintText: "Search categories",
-                            hintStyle: outfit14w400,
+                          )
+                        : Column(
+                            children: provider.availableCategories.map(
+                              (category) => _FilterCategoryRow(
+                                category: category,
+                                isSelected: provider.isCategorySelected(category),
+                                onTap: () => provider.toggleCategory(category),
+                              ),
+                            ).toList(),
                           ),
-                        ),
-                      ),
-                      const SizedBox(height: 20),
-                      ...provider.availableCategories.map(
-                        (category) => _FilterCategoryRow(
-                          category: category,
-                          isSelected: provider.isCategorySelected(category),
-                          onTap: () => provider.toggleCategory(category),
-                        ),
-                      ),
                       const SizedBox(height: 24),
-                      RoundButton(
-                        text: 'Search',
-                        onPressed: () {
-                          Navigator.pop(context);
-                        },
+                      SizedBox(
+                        width: double.infinity,
+                        child: RoundButton(
+                          text: 'Search',
+                          onPressed: () {
+                            Navigator.pop(context);
+                          },
+                        ),
                       ),
                     ],
                   ),

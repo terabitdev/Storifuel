@@ -6,12 +6,14 @@ import 'package:storifuel/core/theme/app_fonts.dart';
 class SearchWidget extends StatelessWidget {
   final TextEditingController controller;
   final Function(String)? onChanged;
+  final Function(String)? onSubmitted;
   final VoidCallback? onFilterTap;
 
   const SearchWidget({
     super.key, 
     required this.controller, 
     this.onChanged,
+    this.onSubmitted,
     this.onFilterTap,
   });
 
@@ -26,6 +28,11 @@ class SearchWidget extends StatelessWidget {
       child: TextField(
         controller: controller,
         onChanged: onChanged,
+        onSubmitted: (value) {
+          FocusScope.of(context).unfocus();
+          onSubmitted?.call(value);
+        },
+        textInputAction: TextInputAction.search,
         decoration: InputDecoration(
           contentPadding: const EdgeInsets.symmetric(vertical: 14),
           border: InputBorder.none,

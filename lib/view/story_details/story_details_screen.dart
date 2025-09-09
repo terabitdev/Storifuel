@@ -38,12 +38,30 @@ class StoryDetailsScreen extends StatelessWidget {
                 Container(
                   height: MediaQuery.of(context).size.height * 0.4,
                   width: double.infinity,
-                  decoration: BoxDecoration(
-                    image: DecorationImage(
-                      image: AssetImage(image),
-                      fit: BoxFit.cover,
-                    ),
-                  ),
+                  child: image.startsWith('http') 
+                      ? Image.network(
+                          image,
+                          fit: BoxFit.cover,
+                          loadingBuilder: (context, child, loadingProgress) {
+                            if (loadingProgress == null) return child;
+                            return Container(
+                              color: Colors.grey[200],
+                              child: const Center(
+                                child: CircularProgressIndicator(),
+                              ),
+                            );
+                          },
+                          errorBuilder: (context, error, stackTrace) {
+                            return Image.asset(
+                              AppImages.story,
+                              fit: BoxFit.cover,
+                            );
+                          },
+                        )
+                      : Image.asset(
+                          image,
+                          fit: BoxFit.cover,
+                        ),
                 ),
                 Positioned(
                   top: MediaQuery.of(context).padding.top + 10,
