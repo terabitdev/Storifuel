@@ -104,7 +104,7 @@ class PDFService {
       // Save the PDF file
       final File file = File(filePath);
       final Uint8List pdfBytes = await pdf.save();
-      await file.writeAsBytes(pdfBytes);
+      await file.writeAsBytes(pdfBytes,flush: true);
 
       return filePath;
     } catch (e) {
