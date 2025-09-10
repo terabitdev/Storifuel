@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:share_plus/share_plus.dart';
 import 'package:storifuel/core/constants/app_images.dart';
 import 'package:storifuel/core/theme/app_fonts.dart';
 import 'package:storifuel/core/utils/toast.dart';
@@ -7,6 +8,7 @@ import 'package:storifuel/models/story_model.dart';
 import 'package:storifuel/services/firebase/story_service.dart';
 import 'package:storifuel/services/pdf/pdf_service.dart';
 import 'package:storifuel/widgets/common/pdf_progress_dialog.dart';
+import 'package:storifuel/widgets/common/share_button.dart';
 import 'package:storifuel/widgets/story_details/story_options_popup.dart';
 
 class StoryDetailsScreen extends StatefulWidget {
@@ -34,6 +36,45 @@ class StoryDetailsScreen extends StatefulWidget {
 }
 
 class _StoryDetailsScreenState extends State<StoryDetailsScreen> {
+  
+  /// Shares the story as PDF
+  Future<void> _shareStoryAsPDF(BuildContext context, StoryModel story) async {
+    try {
+      // Show progress dialog
+      PDFProgressDialog.show(
+        context, 
+        message: 'Preparing story for sharing...',
+      );
+
+      // Generate the PDF
+      final String? filePath = await PDFService.generateStoryPDF(story);
+      
+      // Hide progress dialog
+      // ignore: use_build_context_synchronously
+      PDFProgressDialog.hide(context);
+
+      if (filePath != null) {
+        // Share the PDF file
+        await Share.shareXFiles(
+          [XFile(filePath)],
+          text: 'Check out this story: ${story.title}',
+        );
+      } else {
+        // Show error toast
+        // ignore: use_build_context_synchronously
+        showErrorToast(context, 'Failed to generate PDF for sharing');
+      }
+    } catch (e) {
+      // Hide progress dialog if still showing
+      // ignore: use_build_context_synchronously
+      PDFProgressDialog.hide(context);
+      
+      // Show error toast
+      // ignore: use_build_context_synchronously
+      showErrorToast(context, 'Error sharing story: $e');
+      print(e);
+    }
+  }
   
   /// Exports the story to PDF with progress dialog
   Future<void> _exportToPDF(BuildContext context, StoryModel story) async {
@@ -257,7 +298,10 @@ class _StoryDetailsScreenState extends State<StoryDetailsScreen> {
                   ),
                 ),
               ),
-              // Bottom Share Button\
+              Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: ShareButton(onPressed: () => _shareStoryAsPDF(context, currentStory)),
+              ),
             ],
           );
         },

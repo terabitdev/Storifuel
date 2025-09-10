@@ -108,7 +108,6 @@ class PDFService {
 
       return filePath;
     } catch (e) {
-      print('Error generating PDF: $e');
       return null;
     }
   }
