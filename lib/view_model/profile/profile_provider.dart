@@ -12,7 +12,7 @@ class ProfileProvider extends ChangeNotifier {
   
   String? _profileImageUrl;
   File? _selectedImage;
-  bool _isLoading = false;
+  final bool _isLoading = false;
   bool _isUpdating = false;
   
   String? get profileImageUrl => _profileImageUrl;
@@ -35,7 +35,7 @@ class ProfileProvider extends ChangeNotifier {
         }
       }
     } catch (e) {
-      print('Error loading profile: $e');
+      //
     }
   }
   
@@ -59,7 +59,7 @@ class ProfileProvider extends ChangeNotifier {
       
       return await snapshot.ref.getDownloadURL();
     } catch (e) {
-      print('Error uploading profile image: $e');
+      // Handle error if necessary
       return null;
     }
   }
@@ -70,7 +70,6 @@ class ProfileProvider extends ChangeNotifier {
       final ref = _storage.refFromURL(imageUrl);
       await ref.delete();
     } catch (e) {
-      print('Error deleting old profile image: $e');
       // Continue even if deletion fails
     }
   }
@@ -110,11 +109,8 @@ class ProfileProvider extends ChangeNotifier {
       
       // Clear selected image after successful update
       _selectedImage = null;
-      
-      print('Profile updated successfully');
       return true;
     } catch (e) {
-      print('Error updating profile: $e');
       return false;
     } finally {
       _isUpdating = false;

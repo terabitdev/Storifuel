@@ -95,18 +95,18 @@ class StoryProvider extends ChangeNotifier {
   // Publish story
   Future<bool> publishStory() async {
     try {
-      print('Starting publishStory...');
+      // print('Starting publishStory...');
       final validation = validateStory();
       if (validation != null) {
-        print('Validation failed: $validation');
+        // print('Validation failed: $validation');
         throw Exception(validation);
       }
 
-      print('Setting publishing state to true...');
+      // print('Setting publishing state to true...');
       isPublishing = true;
       notifyListeners();
 
-      print('Calling story service...');
+      // print('Calling story service...');
       await _storyService.createStory(
         title: titleController.text.trim(),
         description: storyController.text.trim(),
@@ -114,15 +114,15 @@ class StoryProvider extends ChangeNotifier {
         imageFile: selectedImage,
       );
 
-      print('Story service completed. Setting publishing to false...');
+      // print('Story service completed. Setting publishing to false...');
       // Set publishing to false before clearing
       isPublishing = false;
       notifyListeners();
       
-      print('publishStory completed successfully!');
+      // print('publishStory completed successfully!');
       return true;
     } catch (e) {
-      print('Error in publishStory: $e');
+      // print('Error in publishStory: $e');
       isPublishing = false;
       notifyListeners();
       rethrow;
@@ -132,18 +132,18 @@ class StoryProvider extends ChangeNotifier {
   // Update existing story
   Future<bool> updateStory(String storyId) async {
     try {
-      print('Starting updateStory...');
+      // print('Starting updateStory...');
       final validation = validateStory();
       if (validation != null) {
-        print('Validation failed: $validation');
+        // print('Validation failed: $validation');
         throw Exception(validation);
       }
 
-      print('Setting publishing state to true...');
+      // print('Setting publishing state to true...');
       isPublishing = true;
       notifyListeners();
 
-      print('Calling story service update...');
+      // print('Calling story service update...');
       await _storyService.updateStory(
         storyId,
         title: titleController.text.trim(),
@@ -152,14 +152,14 @@ class StoryProvider extends ChangeNotifier {
         imageFile: selectedImage, // This will replace the image if a new one is selected
       );
 
-      print('Story service update completed. Setting publishing to false...');
+      // print('Story service update completed. Setting publishing to false...');
       isPublishing = false;
       notifyListeners();
       
-      print('updateStory completed successfully!');
+      // print('updateStory completed successfully!');
       return true;
     } catch (e) {
-      print('Error in updateStory: $e');
+      // print('Error in updateStory: $e');
       isPublishing = false;
       notifyListeners();
       rethrow;

@@ -25,7 +25,7 @@ class CategoryProvider extends ChangeNotifier {
       _categories = await _categoryService.getCategoriesOnce();
       notifyListeners();
     } catch (e) {
-      print('Error loading initial categories: $e');
+      _errorMessage = 'Failed to load categories: $e';
     }
     
     // Then listen to real-time updates

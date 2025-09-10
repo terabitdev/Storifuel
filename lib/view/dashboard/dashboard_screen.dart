@@ -2,6 +2,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:storifuel/core/constants/app_images.dart';
 import 'package:storifuel/core/theme/app_responsiveness.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:storifuel/routes/routes_name.dart';
 import 'package:storifuel/view_model/dashboard/dashboard_provider.dart';
@@ -27,13 +28,19 @@ class CustomNavigationBar extends StatelessWidget {
           },
         ),
       ],
-      child: Scaffold(
-        body: Consumer<NavBarProvider>(
-          builder: (context, navBarProvider, child) {
-            return navBarProvider.getCurrentScreen();
-          },
-        ),
-        bottomNavigationBar: Consumer<NavBarProvider>(
+      child: PopScope(
+        canPop: false,
+        onPopInvoked: (didPop) async {
+          if (didPop) return;
+          SystemNavigator.pop();
+        },
+        child: Scaffold(
+          body: Consumer<NavBarProvider>(
+            builder: (context, navBarProvider, child) {
+              return navBarProvider.getCurrentScreen();
+            },
+          ),
+          bottomNavigationBar: Consumer<NavBarProvider>(
           builder: (context, navBarProvider, child) {
             return Container(
               decoration: BoxDecoration(
@@ -121,6 +128,7 @@ class CustomNavigationBar extends StatelessWidget {
               ),
             );
           },
+        ),
         ),
       ),
     );

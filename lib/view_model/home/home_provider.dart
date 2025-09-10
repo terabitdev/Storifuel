@@ -41,7 +41,7 @@ class HomeProvider extends ChangeNotifier {
       _filterCategoriesBySearch();
       notifyListeners();
     } catch (e) {
-      print('Error loading initial categories: $e');
+      // Handle error if necessary
     }
 
     // Listen for category changes
@@ -52,7 +52,7 @@ class HomeProvider extends ChangeNotifier {
         notifyListeners();
       },
       onError: (error) {
-        print('Error listening to categories: $error');
+       //
       },
     );
   }

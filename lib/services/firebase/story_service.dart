@@ -227,7 +227,6 @@ class StoryService {
               final oldRef = _storage.refFromURL(currentStory.imageUrl!);
               await oldRef.delete();
             } catch (e) {
-              print('Error deleting old image: $e');
               // Continue even if deletion fails
             }
           }
@@ -281,7 +280,7 @@ class StoryService {
           final ref = _storage.refFromURL(storyToDelete['imageUrl']);
           await ref.delete();
         } catch (e) {
-          print('Error deleting image: $e');
+          // Continue even if deletion fails
         }
       }
 

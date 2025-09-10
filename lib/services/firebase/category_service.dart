@@ -113,31 +113,25 @@ class CategoryService {
   // Helper method to update all stories with a specific category
   Future<void> _updateStoriesCategory(String oldCategoryName, String newCategoryName) async {
     try {
-      print('📝 Updating stories: "$oldCategoryName" → "$newCategoryName"');
       
       // Get user's stories
       final storiesDocSnapshot = await _userStoriesDoc.get();
       if (!storiesDocSnapshot.exists) {
-        print('❌ No stories document found');
         return;
       }
 
       final storiesData = storiesDocSnapshot.data() as Map<String, dynamic>;
       final storiesArray = List<Map<String, dynamic>>.from(storiesData['stories'] ?? []);
-
-      print('📚 Found ${storiesArray.length} stories to check');
       
       bool hasChanges = false;
+      // ignore: unused_local_variable
       int updatedCount = 0;
 
       // Update stories that have the old category name
       for (int i = 0; i < storiesArray.length; i++) {
         final storyCategory = storiesArray[i]['category'];
-        final storyTitle = storiesArray[i]['title'] ?? 'Untitled';
-        print('📖 Story "$storyTitle" has category: "$storyCategory"');
         
         if (storyCategory == oldCategoryName) {
-          print('🔄 Updating story: $storyTitle from "$oldCategoryName" to "$newCategoryName"');
           storiesArray[i]['category'] = newCategoryName;
           storiesArray[i]['updatedAt'] = DateTime.now();
           hasChanges = true;
@@ -145,20 +139,16 @@ class CategoryService {
         }
       }
 
-      print('✅ Updated $updatedCount stories');
-
       // Save updated stories if there were changes
       if (hasChanges) {
         await _userStoriesDoc.update({
           'stories': storiesArray,
         });
-        print('💾 Stories saved to database');
       } else {
-        print('ℹ️  No stories needed updating');
       }
     } catch (e) {
-      print('❌ Error updating stories category: $e');
-      // Don't rethrow - we don't want category update to fail if story update fails
+// Handle errors if necessary
+      rethrow;
     }
   }
 
