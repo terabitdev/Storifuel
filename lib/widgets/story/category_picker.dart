@@ -93,9 +93,7 @@ class CategoryPicker extends StatelessWidget {
                     ),
                     Center(child: Text('Select Categories', style: nunitoSans16w700.copyWith(color: const Color(0xFF0F182E)))),
                     const SizedBox(height: 20),
-                    if (categoryProvider.isLoading)
-                      Center(child: CircularProgressIndicator(color: secondaryColor))
-                    else if (categoryProvider.categories.isEmpty)
+                    if (categoryProvider.categories.isEmpty)
                       Center(
                         child: Column(
                           children: [

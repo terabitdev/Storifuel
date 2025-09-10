@@ -272,7 +272,7 @@ class _StoryDetailsScreenState extends State<StoryDetailsScreen> {
                             Row(
                               children: [
                                 Text(
-                                  widget.category,
+                                  currentStory.category,
                                   style: nunito14w500.copyWith(
                                     color: const Color(0xFF4CAF50),
                                   ),

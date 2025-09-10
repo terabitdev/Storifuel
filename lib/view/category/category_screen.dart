@@ -192,12 +192,6 @@ class _CategoryScreenState extends State<CategoryScreen> {
               Expanded(
                 child: Consumer<CategoryProvider>(
                   builder: (context, categoryProvider, child) {
-                    if (categoryProvider.isLoading && categoryProvider.categories.isEmpty) {
-                      return Center(
-                        child: CircularProgressIndicator(color: secondaryColor),
-                      );
-                    }
-                    
                     if (!categoryProvider.hasCategories) {
                       return Center(
                         child: Column(

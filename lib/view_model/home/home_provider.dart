@@ -1,12 +1,16 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:storifuel/models/story_model.dart';
 import 'package:storifuel/services/firebase/story_service.dart';
+import 'package:storifuel/services/firebase/category_service.dart';
 
 class HomeProvider extends ChangeNotifier {
   final List<String> _selectedCategories = [];
   List<String> _availableCategories = [];
   final Set<String> _favoritedStories = <String>{};
   final StoryService _storyService = StoryService();
+  final CategoryService _categoryService = CategoryService();
+  StreamSubscription<List<Map<String, dynamic>>>? _categoriesSubscription;
   
   List<StoryModel> _allStories = [];
   List<StoryModel> _filteredStories = [];
@@ -24,6 +28,40 @@ class HomeProvider extends ChangeNotifier {
   List<StoryModel> get filteredStories => List.unmodifiable(_filteredStories);
   String get searchQuery => _searchQuery;
   bool get isLoading => _isLoading;
+
+  HomeProvider() {
+    _initializeCategories();
+  }
+
+  void _initializeCategories() async {
+    // Load initial categories
+    try {
+      final categories = await _categoryService.getCategoriesOnce();
+      _availableCategories = categories.map((cat) => cat['name'] as String).toList();
+      _filterCategoriesBySearch();
+      notifyListeners();
+    } catch (e) {
+      print('Error loading initial categories: $e');
+    }
+
+    // Listen for category changes
+    _categoriesSubscription = _categoryService.getCategories().listen(
+      (categories) {
+        _availableCategories = categories.map((cat) => cat['name'] as String).toList();
+        _filterCategoriesBySearch();
+        notifyListeners();
+      },
+      onError: (error) {
+        print('Error listening to categories: $error');
+      },
+    );
+  }
+
+  @override
+  void dispose() {
+    _categoriesSubscription?.cancel();
+    super.dispose();
+  }
 
   // Filter management methods
   void toggleCategory(String category) {
@@ -113,23 +151,7 @@ class HomeProvider extends ChangeNotifier {
 
   void updateStories(List<StoryModel> stories) {
     _allStories = stories;
-    _updateAvailableCategories();
     _applyFiltersAndSearch();
-  }
-
-  // Update available categories from user's actual stories
-  void _updateAvailableCategories() {
-    final categories = _allStories.map((story) => story.category).toSet().toList();
-    categories.sort(); // Sort alphabetically
-    _availableCategories = categories;
-    _filterCategoriesBySearch();
-  }
-
-  // Public method to update only categories without full rebuild
-  void updateAvailableCategories(List<String> categories) {
-    _availableCategories = categories;
-    _filterCategoriesBySearch();
-    notifyListeners();
   }
 
   // Main search functionality for stories

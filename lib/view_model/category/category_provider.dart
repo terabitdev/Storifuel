@@ -19,7 +19,16 @@ class CategoryProvider extends ChangeNotifier {
     _initializeCategories();
   }
 
-  void _initializeCategories() {
+  void _initializeCategories() async {
+    // First load categories synchronously to avoid empty state
+    try {
+      _categories = await _categoryService.getCategoriesOnce();
+      notifyListeners();
+    } catch (e) {
+      print('Error loading initial categories: $e');
+    }
+    
+    // Then listen to real-time updates
     _categoriesSubscription = _categoryService.getCategories().listen(
       (categories) {
         _categories = categories;

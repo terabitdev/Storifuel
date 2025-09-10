@@ -7,6 +7,14 @@ class CategoryService {
 
   String? get currentUserId => _auth.currentUser?.uid;
 
+  // Get user's stories document reference
+  DocumentReference get _userStoriesDoc {
+    if (currentUserId == null) {
+      throw Exception('User not authenticated');
+    }
+    return _firestore.collection('stories').doc(currentUserId);
+  }
+
   // Get user's category document reference
   DocumentReference get _userCategoriesDoc {
     if (currentUserId == null) {
@@ -79,19 +87,78 @@ class CategoryService {
       final data = docSnapshot.data() as Map<String, dynamic>;
       final categoriesArray = List<Map<String, dynamic>>.from(data['categories'] ?? []);
 
-      // Find and update the category
+      // Find the category and get old name
       final categoryIndex = categoriesArray.indexWhere((cat) => cat['id'] == categoryId);
       if (categoryIndex != -1) {
-        categoriesArray[categoryIndex]['name'] = newName.trim();
+        final oldName = categoriesArray[categoryIndex]['name'] as String;
+        final trimmedNewName = newName.trim();
+        
+        // Update category name
+        categoriesArray[categoryIndex]['name'] = trimmedNewName;
         categoriesArray[categoryIndex]['updatedAt'] = Timestamp.now();
 
-        // Update the entire array
+        // Update the category array
         await _userCategoriesDoc.update({
           'categories': categoriesArray,
         });
+
+        // Update all stories that use this category
+        await _updateStoriesCategory(oldName, trimmedNewName);
       }
     } catch (e) {
       rethrow;
+    }
+  }
+
+  // Helper method to update all stories with a specific category
+  Future<void> _updateStoriesCategory(String oldCategoryName, String newCategoryName) async {
+    try {
+      print('📝 Updating stories: "$oldCategoryName" → "$newCategoryName"');
+      
+      // Get user's stories
+      final storiesDocSnapshot = await _userStoriesDoc.get();
+      if (!storiesDocSnapshot.exists) {
+        print('❌ No stories document found');
+        return;
+      }
+
+      final storiesData = storiesDocSnapshot.data() as Map<String, dynamic>;
+      final storiesArray = List<Map<String, dynamic>>.from(storiesData['stories'] ?? []);
+
+      print('📚 Found ${storiesArray.length} stories to check');
+      
+      bool hasChanges = false;
+      int updatedCount = 0;
+
+      // Update stories that have the old category name
+      for (int i = 0; i < storiesArray.length; i++) {
+        final storyCategory = storiesArray[i]['category'];
+        final storyTitle = storiesArray[i]['title'] ?? 'Untitled';
+        print('📖 Story "$storyTitle" has category: "$storyCategory"');
+        
+        if (storyCategory == oldCategoryName) {
+          print('🔄 Updating story: $storyTitle from "$oldCategoryName" to "$newCategoryName"');
+          storiesArray[i]['category'] = newCategoryName;
+          storiesArray[i]['updatedAt'] = DateTime.now();
+          hasChanges = true;
+          updatedCount++;
+        }
+      }
+
+      print('✅ Updated $updatedCount stories');
+
+      // Save updated stories if there were changes
+      if (hasChanges) {
+        await _userStoriesDoc.update({
+          'stories': storiesArray,
+        });
+        print('💾 Stories saved to database');
+      } else {
+        print('ℹ️  No stories needed updating');
+      }
+    } catch (e) {
+      print('❌ Error updating stories category: $e');
+      // Don't rethrow - we don't want category update to fail if story update fails
     }
   }
 
@@ -109,13 +176,26 @@ class CategoryService {
       final data = docSnapshot.data() as Map<String, dynamic>;
       final categoriesArray = List<Map<String, dynamic>>.from(data['categories'] ?? []);
 
-      // Remove the category with matching ID
-      categoriesArray.removeWhere((cat) => cat['id'] == categoryId);
+      // Find the category to get its name before deleting
+      final categoryToDelete = categoriesArray.firstWhere(
+        (cat) => cat['id'] == categoryId,
+        orElse: () => <String, dynamic>{},
+      );
 
-      // Update the array
-      await _userCategoriesDoc.update({
-        'categories': categoriesArray,
-      });
+      if (categoryToDelete.isNotEmpty) {
+        final categoryName = categoryToDelete['name'] as String;
+        
+        // Remove the category with matching ID
+        categoriesArray.removeWhere((cat) => cat['id'] == categoryId);
+
+        // Update the categories array
+        await _userCategoriesDoc.update({
+          'categories': categoriesArray,
+        });
+
+        // Update stories that had this category to have uncategorized
+        await _updateStoriesCategory(categoryName, 'Uncategorized');
+      }
       
     } catch (e) {
       rethrow;
