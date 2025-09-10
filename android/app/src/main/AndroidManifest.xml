@@ -8,7 +8,7 @@
     <uses-permission android:name="android.permission.BLUETOOTH_CONNECT"/>
     
     <application
-        android:label="storifuel"
+        android:label="Storifuel"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity
