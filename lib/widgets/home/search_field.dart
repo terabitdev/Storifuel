@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:storifuel/core/constants/app_colors.dart';
 import 'package:storifuel/core/constants/app_images.dart';
 import 'package:storifuel/core/theme/app_fonts.dart';
 
@@ -23,7 +22,7 @@ class SearchWidget extends StatelessWidget {
     return Container(
       height: 48,
       decoration: BoxDecoration(
-        color: textfieldbgocolor,
+        color: Colors.grey.shade200,
         borderRadius: BorderRadius.circular(12),
       ),
       child: TextField(

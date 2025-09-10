@@ -5,6 +5,7 @@ import 'package:storifuel/core/constants/app_images.dart';
 import 'package:storifuel/core/theme/app_fonts.dart';
 import 'package:storifuel/core/theme/app_responsiveness.dart';
 import 'package:storifuel/core/utils/toast.dart';
+import 'package:storifuel/routes/routes_name.dart';
 import 'package:storifuel/view_model/Auth/auth_provider.dart';
 import 'package:storifuel/widgets/auth/custom_textfield.dart';
 import 'package:storifuel/widgets/common/auth_redirect_text.dart';
@@ -52,8 +53,11 @@ class _SignInScreenState extends State<SignInScreen> {
           context,
           user != null ? 'Welcome back, ${user.email}!' : 'Welcome back!',
         );
-
-        Navigator.pushReplacementNamed(context, '/navbar');
+        Navigator.pushNamedAndRemoveUntil(
+  context,
+  RoutesName.navbar,
+  (Route<dynamic> route) => false, // remove all previous routes
+);
       }
     } else {
       if (mounted && authProvider.errorMessage != null) {
