@@ -14,6 +14,7 @@ class StoryField extends StatelessWidget {
         Text('Story', style: nunitoSans16w400.copyWith(color: const Color(0xFF111827))),
         const SizedBox(height: 8),
         TextField(
+          style:  outfit14w400.copyWith(color: const Color(0xFF0F182E)),
           controller: controller,
           maxLines: 8,
           decoration: InputDecoration(

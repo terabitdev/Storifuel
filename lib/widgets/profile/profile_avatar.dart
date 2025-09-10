@@ -107,15 +107,6 @@ class ProfileAvatar extends StatelessWidget {
                     title: 'Take Photo',
                     onTap: () => _pickImage(context, ImageSource.camera),
                   ),
-                  if (imageUrl != null || selectedImage != null) ...[
-                    const SizedBox(height: 16),
-                    _buildOptionTile(
-                      context: context,
-                      icon: Icons.delete_outline,
-                      title: 'Remove Photo',
-                      onTap: () => _removeImage(context),
-                    ),
-                  ],
                 ],
               ),
             ),
@@ -173,8 +164,4 @@ class ProfileAvatar extends StatelessWidget {
     }
   }
 
-  void _removeImage(BuildContext context) {
-    Navigator.pop(context);
-    onImageSelected?.call(null);
-  }
 }

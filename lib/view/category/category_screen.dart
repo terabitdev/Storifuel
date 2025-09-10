@@ -87,7 +87,7 @@ class _CategoryScreenState extends State<CategoryScreen> {
               height: 6,
               margin: EdgeInsets.only(top: 12, bottom: 32),
               decoration: BoxDecoration(
-                color: Color(0xFFF3F4F6),
+                color: Colors.grey[300],
                 borderRadius: BorderRadius.circular(2),
               ),
             ),

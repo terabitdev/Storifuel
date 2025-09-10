@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:storifuel/core/constants/app_colors.dart';
 import 'package:storifuel/core/constants/app_images.dart';
 import 'package:storifuel/core/theme/app_fonts.dart';
 
@@ -22,10 +23,11 @@ class SearchWidget extends StatelessWidget {
     return Container(
       height: 48,
       decoration: BoxDecoration(
-        color: Colors.grey.shade100,
+        color: textfieldbgocolor,
         borderRadius: BorderRadius.circular(12),
       ),
       child: TextField(
+        style: poppins14w400.copyWith(color: const Color(0xFF0F182E)),
         controller: controller,
         onChanged: onChanged,
         onSubmitted: (value) {

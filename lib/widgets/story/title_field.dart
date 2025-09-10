@@ -14,6 +14,7 @@ class TitleField extends StatelessWidget {
         Text('Title', style: nunitoSans16w400.copyWith(color: const Color(0xFF0F182E))),
         const SizedBox(height: 8),
         TextField(
+          style: outfit14w400.copyWith(color: const Color(0xFF0F182E)),
           controller: controller,
           decoration: InputDecoration(
             hintText: 'Write a title…',

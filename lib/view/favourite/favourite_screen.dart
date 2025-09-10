@@ -33,7 +33,7 @@ class FavouriteScreen extends StatelessWidget {
             children: [
               Center(child: Image.asset(AppImages.logo1, width: 118, height: 32)),
               const SizedBox(height: 20),
-              Text("Favourite", style: poppins18w600),
+              Text("Favorites", style: poppins18w600),
               const SizedBox(height: 12),
               Expanded(
                 child: StreamBuilder<List<StoryModel>>(
@@ -83,14 +83,14 @@ class FavouriteScreen extends StatelessWidget {
           ),
           const SizedBox(height: 16),
           Text(
-            'No Favourite Stories Yet',
+            'No Favorite Stories Yet',
             style: nunitoSans18w700.copyWith(
               color: Colors.grey[600],
             ),
           ),
           const SizedBox(height: 8),
           Text(
-            'Start adding stories to your favourites\nby tapping the heart icon',
+            'Start adding stories to your favorites\nby tapping the heart icon',
             textAlign: TextAlign.center,
             style: outfit14w400.copyWith(
               color: Colors.grey[500],

@@ -91,11 +91,13 @@ class Routes {
             content: args['content'],
           ),
         );
-        
       default:
         return MaterialPageRoute(
-          builder: (_) =>
-              const Scaffold(body: Center(child: Text("No Route defined"))),
+          builder: (BuildContext context) => const Scaffold(
+            body: Center(
+              child: Text('No route defined for this path'),
+            ),
+          ),
         );
     }
   }
