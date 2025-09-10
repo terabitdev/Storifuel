@@ -7,6 +7,7 @@ import 'package:storifuel/core/utils/toast.dart';
 import 'package:storifuel/models/story_model.dart';
 import 'package:storifuel/services/firebase/story_service.dart';
 import 'package:storifuel/services/pdf/pdf_service.dart';
+import 'package:storifuel/view/story/create_story_screen.dart';
 import 'package:storifuel/widgets/common/pdf_progress_dialog.dart';
 import 'package:storifuel/widgets/common/share_button.dart';
 import 'package:storifuel/widgets/story_details/story_options_popup.dart';
@@ -36,6 +37,16 @@ class StoryDetailsScreen extends StatefulWidget {
 }
 
 class _StoryDetailsScreenState extends State<StoryDetailsScreen> {
+  
+  /// Navigate to edit story screen
+  void _navigateToEditStory(BuildContext context, StoryModel story) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => CreateStoryScreen(storyToEdit: story),
+      ),
+    );
+  }
   
   /// Shares the story as PDF
   Future<void> _shareStoryAsPDF(BuildContext context, StoryModel story) async {
@@ -230,7 +241,7 @@ class _StoryDetailsScreenState extends State<StoryDetailsScreen> {
                                   onTap: () {
                                     StoryOptionsPopup.show(
                                       context,
-                                      onEdit: () {},
+                                      onEdit: () => _navigateToEditStory(context, currentStory),
                                       onExportPDF: () => _exportToPDF(context, currentStory),
                                     );
                                   },

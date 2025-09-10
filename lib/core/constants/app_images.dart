@@ -34,4 +34,5 @@ class AppImages {
   static const String shareIcon = 'assets/icons/share.svg';
   static const String pdfIcon = 'assets/images/download.png';
   static const String messageEditIcon = 'assets/images/message-edit.png';
+  static const String imageEditIcon = 'assets/images/image-edit.png';
 }

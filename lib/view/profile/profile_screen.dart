@@ -4,72 +4,120 @@ import 'package:storifuel/core/constants/app_colors.dart';
 import 'package:storifuel/core/theme/app_fonts.dart';
 import 'package:storifuel/core/utils/toast.dart';
 import 'package:storifuel/view_model/Auth/auth_provider.dart';
+import 'package:storifuel/view_model/profile/profile_provider.dart';
 import 'package:storifuel/widgets/common/round_button.dart';
 import 'package:storifuel/widgets/profile/profile_textfield.dart';
+import 'package:storifuel/widgets/profile/profile_avatar.dart';
 
-class ProfileScreen extends StatelessWidget {
+class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
 
   @override
+  State<ProfileScreen> createState() => _ProfileScreenState();
+}
+
+class _ProfileScreenState extends State<ProfileScreen> {
+  late ProfileProvider _profileProvider;
+
+  @override
+  void initState() {
+    super.initState();
+    _profileProvider = ProfileProvider();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _profileProvider.loadProfile();
+    });
+  }
+
+  @override
+  void dispose() {
+    _profileProvider.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      resizeToAvoidBottomInset: true,
-      appBar: AppBar(
-        actions: [
-          IconButton(
-            icon: Icon(Icons.logout_outlined,color: secondaryColor,),
-            onPressed: () {
-              showLogoutDialog(context);
-            },
+    return ChangeNotifierProvider.value(
+      value: _profileProvider,
+      child: Scaffold(
+        resizeToAvoidBottomInset: true,
+        appBar: AppBar(
+          actions: [
+            IconButton(
+              icon: Icon(Icons.logout_outlined, color: secondaryColor),
+              onPressed: () {
+                showLogoutDialog(context);
+              },
+            ),
+            const SizedBox(width: 10),
+          ],
+          backgroundColor: Colors.white,
+          scrolledUnderElevation: 0,
+          automaticallyImplyLeading: false,
+          elevation: 0,
+          centerTitle: true,
+          title: Text(
+            "Edit Profile",
+            style: nunitoSans18w700,
           ),
-          SizedBox(width: 10),
-        ],
-        backgroundColor: Colors.white,
-        scrolledUnderElevation: 0,
-        automaticallyImplyLeading: false, // removes back arrow
-        elevation: 0,
-        centerTitle: true,
-        title: Text(
-          "Edit Profile",
-          style: nunitoSans18w700,
         ),
-      ),
-      body: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              const SizedBox(height: 12),
-              Stack(
-                alignment: Alignment.bottomRight,
-                children: [
-                  const CircleAvatar(
-                    radius: 60,
-                    backgroundColor: Color(0xFFE0E7FF), 
-                  ),
-                  Positioned(
-                    right: 4,
-                    child: Image.asset(
-                      "assets/images/image-edit.png",
-                      height: 40,
-                      width: 40,
+        body: Consumer<ProfileProvider>(
+          builder: (context, profileProvider, child) {
+            return SingleChildScrollView(
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    const SizedBox(height: 12),
+                    ProfileAvatar(
+                      imageUrl: profileProvider.profileImageUrl,
+                      selectedImage: profileProvider.selectedImage,
+                      onImageSelected: profileProvider.setSelectedImage,
                     ),
-                  ),
-                ],
+                    const SizedBox(height: 32),
+                    ProfileCustomTextField(
+                      label: "Full name",
+                      hint: "Enter your full name",
+                      controller: profileProvider.nameController,
+                    ),
+                    const SizedBox(height: 16),
+                    ProfileCustomTextField(
+                      label: "Email",
+                      hint: "Enter your email",
+                      controller: profileProvider.emailController,
+                      readOnly: true,
+                    ),
+                    const SizedBox(height: 140),
+                    RoundButton(
+                      text: "Save",
+                      isLoading: profileProvider.isUpdating,
+                      onPressed: profileProvider.isUpdating 
+                          ? null 
+                          : () => _handleSave(context, profileProvider),
+                    ),
+                  ],
+                ),
               ),
-        
-              const SizedBox(height: 32),
-              ProfileCustomTextField(label: "Full name", hint: "Enter your full name"),
-              const SizedBox(height: 16),
-              ProfileCustomTextField(label: "Email", hint: "Enter your email"),
-              const SizedBox(height: 140),
-              RoundButton(text: "Save", onPressed: () {}),
-            ],
-          ),
+            );
+          },
         ),
       ),
     );
+  }
+
+  Future<void> _handleSave(BuildContext context, ProfileProvider profileProvider) async {
+    try {
+      final success = await profileProvider.updateProfile();
+      if (success && context.mounted) {
+        showSuccessToast(context, 'Profile updated successfully!');
+      } else if (context.mounted) {
+        showErrorToast(context, 'Failed to update profile');
+      }
+    } catch (e) {
+      if (context.mounted) {
+        showErrorToast(context, 'Error updating profile: $e');
+      }
+    }
   }
 }
 

@@ -9,8 +9,9 @@ import 'dart:io';
 
 class MediaUploader extends StatefulWidget {
   final Function(File?)? onImageSelected;
+  final String? existingImageUrl;
 
-  const MediaUploader({super.key, this.onImageSelected});
+  const MediaUploader({super.key, this.onImageSelected, this.existingImageUrl});
 
   @override
   State<MediaUploader> createState() => _MediaUploaderState();
@@ -24,7 +25,9 @@ class _MediaUploaderState extends State<MediaUploader> {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: _showImagePickerOptions,
-      child: _selectedImage == null ? _buildUploadWidget() : _buildImageWidget(),
+      child: _selectedImage == null && widget.existingImageUrl == null 
+          ? _buildUploadWidget() 
+          : _buildImageWidget(),
     );
   }
 
@@ -64,7 +67,9 @@ class _MediaUploaderState extends State<MediaUploader> {
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(12),
         image: DecorationImage(
-          image: FileImage(_selectedImage!),
+          image: _selectedImage != null 
+              ? FileImage(_selectedImage!) as ImageProvider
+              : NetworkImage(widget.existingImageUrl!),
           fit: BoxFit.cover,
         ),
       ),

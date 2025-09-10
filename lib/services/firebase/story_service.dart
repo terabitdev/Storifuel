@@ -218,9 +218,21 @@ class StoryService {
       if (storyIndex != -1) {
         final currentStory = StoryModel.fromMap(storiesArray[storyIndex]);
         
-        // Upload new image if provided
+        // Upload new image if provided and delete old one
         String? imageUrl = currentStory.imageUrl;
         if (imageFile != null) {
+          // Delete old image if it exists
+          if (currentStory.imageUrl != null && currentStory.imageUrl!.isNotEmpty) {
+            try {
+              final oldRef = _storage.refFromURL(currentStory.imageUrl!);
+              await oldRef.delete();
+            } catch (e) {
+              print('Error deleting old image: $e');
+              // Continue even if deletion fails
+            }
+          }
+          
+          // Upload new image
           imageUrl = await _uploadImage(imageFile, storyId);
         }
 

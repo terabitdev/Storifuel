@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'dart:io';
+import 'package:storifuel/models/story_model.dart';
 import 'package:storifuel/services/firebase/story_service.dart';
 
 class StoryProvider extends ChangeNotifier {
@@ -9,6 +10,7 @@ class StoryProvider extends ChangeNotifier {
 
   String? selectedCategory;
   File? selectedImage;
+  String? existingImageUrl; // For edit mode - tracks the current image URL
   bool isListening = false;
   bool isPublishing = false;
   final List<String> availableCategories = <String>[
@@ -44,9 +46,27 @@ class StoryProvider extends ChangeNotifier {
     storyController.clear();
     selectedCategory = null;
     selectedImage = null;
+    existingImageUrl = null;
     isListening = false;
     isPublishing = false;
     notifyListeners();
+  }
+
+  // Initialize provider for edit mode
+  void initializeForEdit(StoryModel? story) {
+    if (story != null) {
+      titleController.text = story.title;
+      storyController.text = story.description;
+      selectedCategory = story.category;
+      existingImageUrl = story.imageUrl;
+      
+      // Add category to available categories if it doesn't exist
+      if (story.category.isNotEmpty && !availableCategories.contains(story.category)) {
+        availableCategories.add(story.category);
+      }
+      
+      notifyListeners();
+    }
   }
 
   void addCategory(String category) {
@@ -103,6 +123,43 @@ class StoryProvider extends ChangeNotifier {
       return true;
     } catch (e) {
       print('Error in publishStory: $e');
+      isPublishing = false;
+      notifyListeners();
+      rethrow;
+    }
+  }
+
+  // Update existing story
+  Future<bool> updateStory(String storyId) async {
+    try {
+      print('Starting updateStory...');
+      final validation = validateStory();
+      if (validation != null) {
+        print('Validation failed: $validation');
+        throw Exception(validation);
+      }
+
+      print('Setting publishing state to true...');
+      isPublishing = true;
+      notifyListeners();
+
+      print('Calling story service update...');
+      await _storyService.updateStory(
+        storyId,
+        title: titleController.text.trim(),
+        description: storyController.text.trim(),
+        category: selectedCategory!,
+        imageFile: selectedImage, // This will replace the image if a new one is selected
+      );
+
+      print('Story service update completed. Setting publishing to false...');
+      isPublishing = false;
+      notifyListeners();
+      
+      print('updateStory completed successfully!');
+      return true;
+    } catch (e) {
+      print('Error in updateStory: $e');
       isPublishing = false;
       notifyListeners();
       rethrow;

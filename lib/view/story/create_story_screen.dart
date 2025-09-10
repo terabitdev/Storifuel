@@ -4,6 +4,7 @@ import 'package:storifuel/core/constants/app_colors.dart';
 import 'package:storifuel/core/constants/app_images.dart';
 import 'package:storifuel/core/theme/app_fonts.dart';
 import 'package:storifuel/core/utils/toast.dart';
+import 'package:storifuel/models/story_model.dart';
 import 'package:storifuel/view_model/story/story_provider.dart';
 import 'package:storifuel/widgets/common/round_button.dart';
 import 'package:storifuel/widgets/story/category_picker.dart';
@@ -13,12 +14,16 @@ import 'package:storifuel/widgets/story/title_field.dart';
 import 'package:storifuel/widgets/story/voice_button.dart';
 
 class CreateStoryScreen extends StatelessWidget {
-  const CreateStoryScreen({super.key});
+  final StoryModel? storyToEdit;
+  
+  const CreateStoryScreen({super.key, this.storyToEdit});
 
   @override
   Widget build(BuildContext context) {
+    final isEditMode = storyToEdit != null;
+    
     return ChangeNotifierProvider(
-      create: (_) => StoryProvider(),
+      create: (_) => StoryProvider()..initializeForEdit(storyToEdit),
       child: Builder(
         builder: (context) {
           final provider = Provider.of<StoryProvider>(context, listen: false);
@@ -32,7 +37,10 @@ class CreateStoryScreen extends StatelessWidget {
                 onPressed: () => Navigator.pop(context),
               ),
               centerTitle: true,
-              title: Text('Create New Story', style: nunitoSans18w700.copyWith(color: const Color(0xFF0F182E))),
+              title: Text(
+                isEditMode ? 'Edit Story' : 'Create New Story', 
+                style: nunitoSans18w700.copyWith(color: const Color(0xFF0F182E))
+              ),
             ),
             body: SafeArea(
               child: SingleChildScrollView(
@@ -42,6 +50,7 @@ class CreateStoryScreen extends StatelessWidget {
                   children: [
                     MediaUploader(
                       onImageSelected: (image) => provider.setSelectedImage(image),
+                      existingImageUrl: provider.existingImageUrl,
                     ),
                     const SizedBox(height: 20),
                     TitleField(controller: provider.titleController),
@@ -55,11 +64,13 @@ class CreateStoryScreen extends StatelessWidget {
                     Consumer<StoryProvider>(
                       builder: (context, provider, _) {
                         return RoundButton(
-                          text: 'Publish',
+                          text: isEditMode ? 'Update Story' : 'Publish',
                           isLoading: provider.isPublishing,
                           onPressed: provider.isPublishing
                               ? null
-                              : () => _publishStory(context, provider),
+                              : () => isEditMode 
+                                  ? _updateStory(context, provider)
+                                  : _publishStory(context, provider),
                         );
                       },
                     ),
@@ -85,7 +96,22 @@ class CreateStoryScreen extends StatelessWidget {
       }
     } catch (e) {
       if (context.mounted) {
-        showSuccessToast(context, 'Failed to publish story: $e');
+        showErrorToast(context, 'Failed to publish story: $e');
+      }
+    }
+  }
+
+  Future<void> _updateStory(BuildContext context, StoryProvider provider) async {
+    try {
+      final success = await provider.updateStory(storyToEdit!.id);
+      if (success && context.mounted) {
+        showSuccessToast(context, 'Story updated successfully!');
+        Navigator.pop(context); // Navigate back to story details
+        Navigator.pop(context); // Navigate back to previous screen (likely home)
+      }
+    } catch (e) {
+      if (context.mounted) {
+        showErrorToast(context, 'Failed to update story: $e');
       }
     }
   }
