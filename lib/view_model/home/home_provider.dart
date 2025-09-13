@@ -9,6 +9,7 @@ class HomeProvider extends ChangeNotifier {
   List<String> _availableCategories = [];
   final Set<String> _favoritedStories = <String>{};
   final StoryService _storyService = StoryService();
+  bool _disposed = false;
   final CategoryService _categoryService = CategoryService();
   StreamSubscription<List<Map<String, dynamic>>>? _categoriesSubscription;
   
@@ -34,34 +35,39 @@ class HomeProvider extends ChangeNotifier {
   }
 
   void _initializeCategories() async {
-    // Load initial categories
-    try {
-      final categories = await _categoryService.getCategoriesOnce();
+  // Load initial categories
+  try {
+    final categories = await _categoryService.getCategoriesOnce();
+    if (!_disposed) {
       _availableCategories = categories.map((cat) => cat['name'] as String).toList();
       _filterCategoriesBySearch();
       notifyListeners();
-    } catch (e) {
-      // Handle error if necessary
     }
+  } catch (e) {
+    // Handle error if necessary
+  }
 
-    // Listen for category changes
-    _categoriesSubscription = _categoryService.getCategories().listen(
-      (categories) {
+  // Listen for category changes
+  _categoriesSubscription = _categoryService.getCategories().listen(
+    (categories) {
+      if (!_disposed) {
         _availableCategories = categories.map((cat) => cat['name'] as String).toList();
         _filterCategoriesBySearch();
         notifyListeners();
-      },
-      onError: (error) {
-       //
-      },
-    );
-  }
+      }
+    },
+    onError: (error) {
+      // Handle error
+    },
+  );
+}
 
   @override
-  void dispose() {
-    _categoriesSubscription?.cancel();
-    super.dispose();
-  }
+void dispose() {
+  _disposed = true;
+  _categoriesSubscription?.cancel();
+  super.dispose();
+}
 
   // Filter management methods
   void toggleCategory(String category) {
@@ -210,4 +216,11 @@ class HomeProvider extends ChangeNotifier {
     _applyFiltersAndSearch();
     notifyListeners();
   }
+
+  @override
+void notifyListeners() {
+  if (!_disposed) {
+    super.notifyListeners();
+  }
+}
 }
