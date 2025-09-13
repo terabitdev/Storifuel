@@ -55,7 +55,7 @@ class CustomNavigationBar extends StatelessWidget {
                   // ✅ ensures it doesn’t overlap iPhone home indicator
                   top: false, // we only care about bottom padding
                   child: SizedBox(
-                    height:90, // ✅ fixed consistent height (same for iOS & Android)
+                    height: 90, // ✅ fixed consistent height (same for iOS & Android)
                     child: NavigationBar(
                       backgroundColor: Colors.transparent,
                       elevation: 0,
