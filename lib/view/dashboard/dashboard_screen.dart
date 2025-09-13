@@ -1,6 +1,5 @@
 import 'package:flutter_svg/svg.dart';
 import 'package:storifuel/core/constants/app_images.dart';
-import 'package:storifuel/core/theme/app_responsiveness.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
@@ -23,7 +22,9 @@ class CustomNavigationBar extends StatelessWidget {
         ChangeNotifierProxyProvider<HomeProvider, FavouriteProvider>(
           create: (_) => FavouriteProvider(),
           update: (_, homeProvider, favouriteProvider) {
-            favouriteProvider?.syncWithHomeProvider(homeProvider.favoritedStories);
+            favouriteProvider?.syncWithHomeProvider(
+              homeProvider.favoritedStories,
+            );
             return favouriteProvider ?? FavouriteProvider();
           },
         ),
@@ -41,94 +42,99 @@ class CustomNavigationBar extends StatelessWidget {
             },
           ),
           bottomNavigationBar: Consumer<NavBarProvider>(
-          builder: (context, navBarProvider, child) {
-            return Container(
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.only(
-                  topLeft: Radius.circular(20),
-                  topRight: Radius.circular(20),
+            builder: (context, navBarProvider, child) {
+              return Container(
+                decoration: BoxDecoration(
+                  borderRadius: const BorderRadius.only(
+                    topLeft: Radius.circular(20),
+                    topRight: Radius.circular(20),
+                  ),
+                  border: Border.all(color: Colors.grey.shade300, width: 1),
                 ),
-                border: Border.all(color: Colors.grey.shade300, width: 1),
-              ),
-              child: Padding(
-                padding: const EdgeInsets.all(14.0),
-                child: NavigationBar(
-                  backgroundColor: Colors.transparent,
-                  elevation: 0,
-                  height: context.screenHeight * 0.09,
-                  selectedIndex: _getDisplaySelectedIndex(navBarProvider.selectedIndex),
-                  onDestinationSelected: (index) {
-                    if (index == 2) {
-                      // Add button clicked
-                      navBarProvider.showAddBottomSheet(context);
-                    } else {
-                      navBarProvider.updateSelectedIndex(index);
-                    }
-                  },
-                  indicatorColor: Colors.transparent,
-                  destinations: [
-                    NavigationDestination(
-                      icon: SvgPicture.asset(
-                        navBarProvider.selectedIndex == 0
-                            ? AppImages.homeColorIcon
-                            : AppImages.homeIcon,
+                child: SafeArea(
+                  // ✅ ensures it doesn’t overlap iPhone home indicator
+                  top: false, // we only care about bottom padding
+                  child: SizedBox(
+                    height:90, // ✅ fixed consistent height (same for iOS & Android)
+                    child: NavigationBar(
+                      backgroundColor: Colors.transparent,
+                      elevation: 0,
+                      selectedIndex: _getDisplaySelectedIndex(
+                        navBarProvider.selectedIndex,
                       ),
-                      label: '',
-                    ),
-                     NavigationDestination(
-                      icon: SvgPicture.asset(
-                        navBarProvider.selectedIndex == 1
-                            ? AppImages.favouriteColorIcon
-                            : AppImages.favouriteIcon,
-                      ),
-                      label: '',
-                    ),
-                    NavigationDestination(
-                      icon: GestureDetector(
-                        onTap: () {
-                          Navigator.pushNamed(context, RoutesName.createStory);
-                        },
-                        child: Container(
-                          padding: EdgeInsets.only(top: 6),
-                          decoration: BoxDecoration(
-                            boxShadow: [
-                              BoxShadow(
-                                color: Colors.grey.shade300,
-                                spreadRadius: 2,
-                                blurRadius: 10,
-                              ),
-                            ],
-                            shape: BoxShape.circle,
+                      onDestinationSelected: (index) {
+                        if (index == 2) {
+                          navBarProvider.showAddBottomSheet(context);
+                        } else {
+                          navBarProvider.updateSelectedIndex(index);
+                        }
+                      },
+                      indicatorColor: Colors.transparent,
+                      destinations: [
+                        NavigationDestination(
+                          icon: SvgPicture.asset(
+                            navBarProvider.selectedIndex == 0
+                                ? AppImages.homeColorIcon
+                                : AppImages.homeIcon,
                           ),
-                          child: SvgPicture.asset(
-                            AppImages.addIcon,
-                          ),
+                          label: '',
                         ),
-                      ),
-                      label: '',
+                        NavigationDestination(
+                          icon: SvgPicture.asset(
+                            navBarProvider.selectedIndex == 1
+                                ? AppImages.favouriteColorIcon
+                                : AppImages.favouriteIcon,
+                          ),
+                          label: '',
+                        ),
+                        NavigationDestination(
+                          icon: GestureDetector(
+                            onTap: () {
+                              Navigator.pushNamed(
+                                context,
+                                RoutesName.createStory,
+                              );
+                            },
+                            child: Container(
+                              padding: const EdgeInsets.only(top: 6),
+                              decoration: BoxDecoration(
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: Colors.grey.shade300,
+                                    spreadRadius: 2,
+                                    blurRadius: 10,
+                                  ),
+                                ],
+                                shape: BoxShape.circle,
+                              ),
+                              child: SvgPicture.asset(AppImages.addIcon),
+                            ),
+                          ),
+                          label: '',
+                        ),
+                        NavigationDestination(
+                          icon: SvgPicture.asset(
+                            navBarProvider.selectedIndex == 2
+                                ? AppImages.categoryColorIcon
+                                : AppImages.categoryIcon,
+                          ),
+                          label: '',
+                        ),
+                        NavigationDestination(
+                          icon: SvgPicture.asset(
+                            navBarProvider.selectedIndex == 3
+                                ? AppImages.profileColorIcon
+                                : AppImages.profileIcon,
+                          ),
+                          label: '',
+                        ),
+                      ],
                     ),
-                    NavigationDestination(
-                      icon: SvgPicture.asset(
-                        navBarProvider.selectedIndex == 2
-                            ? AppImages.categoryColorIcon
-                            : AppImages.categoryIcon,
-                      ),
-                      label: '',
-                    ),
-                    NavigationDestination(
-                      icon: SvgPicture.asset(
-                        navBarProvider.selectedIndex == 3
-                            ? AppImages.profileColorIcon
-                            : AppImages.profileIcon,
-                      ),
-                      label: '',
-                    ),
-                  ],
+                  ),
                 ),
-              ),
-            );
-          },
-        ),
+              );
+            },
+          ),
         ),
       ),
     );
@@ -142,4 +148,3 @@ class CustomNavigationBar extends StatelessWidget {
     return actualIndex;
   }
 }
-
