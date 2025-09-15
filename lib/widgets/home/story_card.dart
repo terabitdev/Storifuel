@@ -70,20 +70,10 @@ class StoryCard extends StatelessWidget {
                           );
                         },
                         errorBuilder: (context, error, stackTrace) {
-                          return Image.asset(
-                            AppImages.story,
-                            height: 160,
-                            width: double.infinity,
-                            fit: BoxFit.cover,
-                          );
+                          return _buildNoImagePlaceholder();
                         },
                       )
-                    : Image.asset(
-                        AppImages.story,
-                        height: 160,
-                        width: double.infinity,
-                        fit: BoxFit.cover,
-                      ),
+                    : _buildNoImagePlaceholder(),
               ),
               Positioned(
                 top: 10,
@@ -169,4 +159,5 @@ class StoryCard extends StatelessWidget {
       ),
     ));
   }
-}
+
+Widget _buildNoImagePlaceholder() { return Container( height: 160, width: double.infinity, color: Colors.grey[100], child: Column( mainAxisAlignment: MainAxisAlignment.center, children: [ Icon( Icons.image_not_supported_outlined, size: 40, color: Colors.grey[400], ), const SizedBox(height: 8), Text( 'No Image Uploaded', style: nunito12w400.copyWith( color: Colors.grey[500], fontSize: 14, ), ), ], ), ); } }

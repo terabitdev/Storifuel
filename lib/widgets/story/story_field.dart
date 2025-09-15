@@ -4,7 +4,8 @@ import 'package:storifuel/core/theme/app_fonts.dart';
 
 class StoryField extends StatelessWidget {
   final TextEditingController controller;
-  const StoryField({super.key, required this.controller});
+  final FocusNode? focusNode;
+  const StoryField({super.key, required this.controller, this.focusNode});
 
   @override
   Widget build(BuildContext context) {
@@ -16,6 +17,7 @@ class StoryField extends StatelessWidget {
         TextField(
           style:  outfit14w400.copyWith(color: const Color(0xFF0F182E)),
           controller: controller,
+          focusNode: focusNode,
           maxLines: 8,
           decoration: InputDecoration(
             hintText: 'Write something here…',

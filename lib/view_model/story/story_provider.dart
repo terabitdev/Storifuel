@@ -6,6 +6,7 @@ import 'package:storifuel/services/firebase/story_service.dart';
 class StoryProvider extends ChangeNotifier {
   final TextEditingController titleController = TextEditingController();
   final TextEditingController storyController = TextEditingController();
+  final FocusNode storyFocusNode = FocusNode();
   final StoryService _storyService = StoryService();
 
   String? selectedCategory;
@@ -164,6 +165,14 @@ class StoryProvider extends ChangeNotifier {
       notifyListeners();
       rethrow;
     }
+  }
+
+  @override
+  void dispose() {
+    titleController.dispose();
+    storyController.dispose();
+    storyFocusNode.dispose();
+    super.dispose();
   }
 }
 

@@ -8,6 +8,7 @@ import 'package:storifuel/models/story_model.dart';
 import 'package:storifuel/services/firebase/story_service.dart';
 import 'package:storifuel/services/pdf/pdf_service.dart';
 import 'package:storifuel/view/story/create_story_screen.dart';
+import 'package:storifuel/widgets/common/no_image_placeholder.dart';
 import 'package:storifuel/widgets/common/pdf_progress_dialog.dart';
 import 'package:storifuel/widgets/common/share_button.dart';
 import 'package:storifuel/widgets/story_details/story_options_popup.dart';
@@ -167,9 +168,9 @@ class _StoryDetailsScreenState extends State<StoryDetailsScreen> {
                           Container(
                             height: MediaQuery.of(context).size.height * 0.4,
                             width: double.infinity,
-                            child: widget.image.startsWith('http')
+                            child: currentStory.imageUrl != null && currentStory.imageUrl!.isNotEmpty
                                 ? Image.network(
-                                    widget.image,
+                                    currentStory.imageUrl!,
                                     fit: BoxFit.cover,
                                     loadingBuilder:
                                         (context, child, loadingProgress) {
@@ -184,13 +185,10 @@ class _StoryDetailsScreenState extends State<StoryDetailsScreen> {
                                           );
                                         },
                                     errorBuilder: (context, error, stackTrace) {
-                                      return Image.asset(
-                                        AppImages.story,
-                                        fit: BoxFit.cover,
-                                      );
+                                      return const NoImagePlaceholder();
                                     },
                                   )
-                                : Image.asset(widget.image, fit: BoxFit.cover),
+                                : const NoImagePlaceholder(),
                           ),
                           Positioned(
                             top: MediaQuery.of(context).padding.top + 10,

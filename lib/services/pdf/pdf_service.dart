@@ -54,12 +54,8 @@ class PDFService {
                 ],
               ),
               pw.SizedBox(height: 10),
-              
-              // Divider
               pw.Divider(thickness: 1),
               pw.SizedBox(height: 20),
-
-              // Story content
               pw.Paragraph(
                 text: story.description,
                 style: pw.TextStyle(
@@ -67,10 +63,7 @@ class PDFService {
                   lineSpacing: 1.5,
                 ),
               ),
-              
               pw.SizedBox(height: 40),
-              
-              // Footer
               pw.Align(
                 alignment: pw.Alignment.center,
                 child: pw.Text(
@@ -86,12 +79,8 @@ class PDFService {
           },
         ),
       );
-
-      // Get the app's document directory
       final Directory appDocDir = await getApplicationDocumentsDirectory();
       final String appDocPath = appDocDir.path;
-      
-      // Create a filename with sanitized title and timestamp
       final sanitizedTitle = story.title
           .replaceAll(RegExp(r'[^\w\s-]'), '') // Remove special characters
           .replaceAll(RegExp(r'\s+'), '_') // Replace spaces with underscores

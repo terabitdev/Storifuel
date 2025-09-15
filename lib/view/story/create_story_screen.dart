@@ -55,7 +55,10 @@ class CreateStoryScreen extends StatelessWidget {
                     const SizedBox(height: 20),
                     TitleField(controller: provider.titleController),
                     const SizedBox(height: 20),
-                    StoryField(controller: provider.storyController),
+                    StoryField(
+                      controller: provider.storyController,
+                      focusNode: provider.storyFocusNode,
+                    ),
                     const SizedBox(height: 16),
                     const VoiceButton(),
                     const SizedBox(height: 24),
