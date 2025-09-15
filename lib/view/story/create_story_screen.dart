@@ -43,9 +43,14 @@ class CreateStoryScreen extends StatelessWidget {
               ),
             ),
             body: SafeArea(
-              child: SingleChildScrollView(
-                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-                child: Column(
+              child: GestureDetector(
+                onTap: () {
+                  // Dismiss keyboard when tapping outside text fields
+                  FocusScope.of(context).unfocus();
+                },
+                child: SingleChildScrollView(
+                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                  child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     MediaUploader(
@@ -79,6 +84,7 @@ class CreateStoryScreen extends StatelessWidget {
                     ),
                     const SizedBox(height: 20),
                   ],
+                  ),
                 ),
               ),
             ),

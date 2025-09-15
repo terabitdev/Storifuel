@@ -42,6 +42,10 @@ class StoryProvider extends ChangeNotifier {
     notifyListeners();
   }
 
+  void dismissKeyboard() {
+    storyFocusNode.unfocus();
+  }
+
   void clear() {
     titleController.clear();
     storyController.clear();

@@ -19,6 +19,10 @@ class StoryField extends StatelessWidget {
           controller: controller,
           focusNode: focusNode,
           maxLines: 8,
+          textInputAction: TextInputAction.newline,
+          onTapOutside: (event) {
+            focusNode?.unfocus();
+          },
           decoration: InputDecoration(
             hintText: 'Write something here…',
             hintStyle: outfit14w400,
