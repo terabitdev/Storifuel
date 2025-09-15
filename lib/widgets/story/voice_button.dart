@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
 import 'package:storifuel/core/constants/app_colors.dart';
 import 'package:storifuel/core/constants/app_images.dart';
@@ -17,14 +18,48 @@ class VoiceButton extends StatefulWidget {
 class _VoiceButtonState extends State<VoiceButton> {
   final stt.SpeechToText _speech = stt.SpeechToText();
   bool _isInitialized = false;
-
+  bool _hasPermission = false;
   @override
   void initState() {
     super.initState();
     _initializeSpeech();
   }
 
+Future<void> _requestPermissions() async {
+    try {
+      // Request microphone permission
+      final permission = await Permission.microphone.request();
+
+      if (permission == PermissionStatus.granted) {
+        _hasPermission = true;
+        print('Microphone permission granted');
+      } else if (permission == PermissionStatus.permanentlyDenied) {
+        _hasPermission = false;
+        print('Microphone permission permanently denied');
+        // You might want to show a dialog to go to app settings
+        // showAlertDialog(
+        //   context,
+        //   title: "Microphone permission denied",
+        //   message: "Microphone permission permanently denied. Please go to app settings and enable microphone permission.",
+        //   okButtonText: "Go to settings",
+        //   onOkayPressed: () async{
+        //     await openAppSettings();
+        //     Navigator.pop(context);
+        //   },
+        //   buttonBgColor: kAppPrimaryColor,
+        //   showLoading: false,
+        // );
+      } else {
+        _hasPermission = false;
+        print('Microphone permission denied');
+      }
+    } catch (e) {
+      print('Permission error: $e');
+      _hasPermission = false;
+    }
+  }
   Future<void> _initializeSpeech() async {
+    await _requestPermissions();
     try {
       _isInitialized = await _speech.initialize(
         onStatus: (status) {

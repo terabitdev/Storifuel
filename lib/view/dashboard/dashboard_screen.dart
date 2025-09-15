@@ -51,85 +51,81 @@ class CustomNavigationBar extends StatelessWidget {
                   ),
                   border: Border.all(color: Colors.grey.shade300, width: 1),
                 ),
-                child: SafeArea(
-                  // ✅ ensures it doesn’t overlap iPhone home indicator
-                  top: false, // we only care about bottom padding
-                  child: SizedBox(
-                    height: 90, // ✅ fixed consistent height (same for iOS & Android)
-                    child: NavigationBar(
-                      backgroundColor: Colors.transparent,
-                      elevation: 0,
-                      selectedIndex: _getDisplaySelectedIndex(
-                        navBarProvider.selectedIndex,
-                      ),
-                      onDestinationSelected: (index) {
-                        if (index == 2) {
-                          navBarProvider.showAddBottomSheet(context);
-                        } else {
-                          navBarProvider.updateSelectedIndex(index);
-                        }
-                      },
-                      indicatorColor: Colors.transparent,
-                      destinations: [
-                        NavigationDestination(
-                          icon: SvgPicture.asset(
-                            navBarProvider.selectedIndex == 0
-                                ? AppImages.homeColorIcon
-                                : AppImages.homeIcon,
-                          ),
-                          label: '',
-                        ),
-                        NavigationDestination(
-                          icon: SvgPicture.asset(
-                            navBarProvider.selectedIndex == 1
-                                ? AppImages.favouriteColorIcon
-                                : AppImages.favouriteIcon,
-                          ),
-                          label: '',
-                        ),
-                        NavigationDestination(
-                          icon: GestureDetector(
-                            onTap: () {
-                              Navigator.pushNamed(
-                                context,
-                                RoutesName.createStory,
-                              );
-                            },
-                            child: Container(
-                              padding: const EdgeInsets.only(top: 6),
-                              decoration: BoxDecoration(
-                                boxShadow: [
-                                  BoxShadow(
-                                    color: Colors.grey.shade300,
-                                    spreadRadius: 2,
-                                    blurRadius: 10,
-                                  ),
-                                ],
-                                shape: BoxShape.circle,
-                              ),
-                              child: SvgPicture.asset(AppImages.addIcon),
-                            ),
-                          ),
-                          label: '',
-                        ),
-                        NavigationDestination(
-                          icon: SvgPicture.asset(
-                            navBarProvider.selectedIndex == 2
-                                ? AppImages.categoryColorIcon
-                                : AppImages.categoryIcon,
-                          ),
-                          label: '',
-                        ),
-                        NavigationDestination(
-                          icon: SvgPicture.asset(
-                            navBarProvider.selectedIndex == 3
-                                ? AppImages.profileColorIcon
-                                : AppImages.profileIcon,
-                          ),
-                          label: '',
-                        ),
-                      ],
+                child: Padding(
+                  padding: const EdgeInsets.only(top: 12.0),
+                  child: NavigationBar(
+                    backgroundColor: Colors.transparent,
+                    elevation: 0,
+                    selectedIndex: _getDisplaySelectedIndex(
+                      navBarProvider.selectedIndex,
                     ),
+                    onDestinationSelected: (index) {
+                      if (index == 2) {
+                        navBarProvider.showAddBottomSheet(context);
+                      } else {
+                        navBarProvider.updateSelectedIndex(index);
+                      }
+                    },
+                    indicatorColor: Colors.transparent,
+                    destinations: [
+                      NavigationDestination(
+                        icon: SvgPicture.asset(
+                          navBarProvider.selectedIndex == 0
+                              ? AppImages.homeColorIcon
+                              : AppImages.homeIcon,
+                        ),
+                        label: '',
+                      ),
+                      NavigationDestination(
+                        icon: SvgPicture.asset(
+                          navBarProvider.selectedIndex == 1
+                              ? AppImages.favouriteColorIcon
+                              : AppImages.favouriteIcon,
+                        ),
+                        label: '',
+                      ),
+                      NavigationDestination(
+                        icon: GestureDetector(
+                          onTap: () {
+                            Navigator.pushNamed(
+                              context,
+                              RoutesName.createStory,
+                            );
+                          },
+                          child: Container(
+                            padding: const EdgeInsets.only(top: 6),
+                            decoration: BoxDecoration(
+                              boxShadow: [
+                                BoxShadow(
+                                  color: Colors.grey.shade300,
+                                  spreadRadius: 2,
+                                  blurRadius: 10,
+                                ),
+                              ],
+                              shape: BoxShape.circle,
+                            ),
+                            child: SvgPicture.asset(AppImages.addIcon),
+                          ),
+                        ),
+                        label: '',
+                      ),
+                      NavigationDestination(
+                        icon: SvgPicture.asset(
+                          navBarProvider.selectedIndex == 2
+                              ? AppImages.categoryColorIcon
+                              : AppImages.categoryIcon,
+                        ),
+                        label: '',
+                      ),
+                      NavigationDestination(
+                        icon: SvgPicture.asset(
+                          navBarProvider.selectedIndex == 3
+                              ? AppImages.profileColorIcon
+                              : AppImages.profileIcon,
+                        ),
+                        label: '',
+                      ),
+                    ],
                   ),
                 ),
               );
