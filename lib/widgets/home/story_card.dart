@@ -25,9 +25,9 @@ class StoryCard extends StatelessWidget {
             'storyId': story.id,
             'image': story.imageUrl ?? AppImages.story,
             'title': story.title,
-            'category': story.category,
+            'categories': story.categories,
             'timeAgo': story.getTimeAgo(),
-            'tags': ['#${story.category.toLowerCase()}'],
+            'tags': story.categories.map((cat) => '#${cat.toLowerCase()}').toList(),
             'content': story.description,
           },
         );

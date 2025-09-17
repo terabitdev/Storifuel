@@ -93,7 +93,7 @@ class StoryService {
   Future<String> createStory({
     required String title,
     required String description,
-    required String category,
+    required List<String> categories,
     File? imageFile,
     String? voiceUrl,
   }) async {
@@ -123,7 +123,7 @@ class StoryService {
         id: storyId,
         title: title.trim(),
         description: description.trim(),
-        category: category,
+        categories: categories,
         imageUrl: imageUrl,
         voiceUrl: voiceUrl,
         createdAt: now,
@@ -199,7 +199,7 @@ class StoryService {
   Future<void> updateStory(String storyId, {
     String? title,
     String? description,
-    String? category,
+    List<String>? categories,
     File? imageFile,
     String? voiceUrl,
   }) async {
@@ -238,7 +238,7 @@ class StoryService {
         final updatedStory = currentStory.copyWith(
           title: title,
           description: description,
-          category: category,
+          categories: categories,
           imageUrl: imageUrl,
           voiceUrl: voiceUrl,
           updatedAt: DateTime.now(),
@@ -299,7 +299,7 @@ class StoryService {
   // Get stories by category
   Future<List<StoryModel>> getStoriesByCategory(String category) async {
     final allStories = await getStoriesOnce();
-    return allStories.where((story) => story.category == category).toList();
+    return allStories.where((story) => story.categories.contains(category)).toList();
   }
 
   // Search stories
@@ -310,7 +310,7 @@ class StoryService {
     return allStories.where((story) {
       return story.title.toLowerCase().contains(lowercaseQuery) ||
              story.description.toLowerCase().contains(lowercaseQuery) ||
-             story.category.toLowerCase().contains(lowercaseQuery);
+             story.categories.any((category) => category.toLowerCase().contains(lowercaseQuery));
     }).toList();
   }
 

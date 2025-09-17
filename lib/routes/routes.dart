@@ -85,7 +85,7 @@ class Routes {
             storyId: args['storyId'],
             image: args['image'],
             title: args['title'],
-            category: args['category'],
+            categories: args['categories'],
             timeAgo: args['timeAgo'],
             tags: args['tags'],
             content: args['content'],

@@ -99,8 +99,8 @@ class HomeScreen extends StatelessWidget {
                         
                         // Apply category filter
                         if (provider.selectedCategories.isNotEmpty) {
-                          displayStories = displayStories.where((story) => 
-                            provider.selectedCategories.contains(story.category)
+                          displayStories = displayStories.where((story) =>
+                            story.categories.any((category) => provider.selectedCategories.contains(category))
                           ).toList();
                         }
                         
@@ -110,9 +110,12 @@ class HomeScreen extends StatelessWidget {
                           displayStories = displayStories.where((story) {
                             return story.title.toLowerCase().contains(lowercaseQuery) ||
                                    story.description.toLowerCase().contains(lowercaseQuery) ||
-                                   story.category.toLowerCase().contains(lowercaseQuery);
+                                   story.categories.any((category) => category.toLowerCase().contains(lowercaseQuery));
                           }).toList();
                         }
+
+                        // Sort stories alphabetically by title (A to Z)
+                        displayStories.sort((a, b) => a.title.toLowerCase().compareTo(b.title.toLowerCase()));
                         
                         if (allStories.isEmpty) {
                           return EmptyStateWidget(

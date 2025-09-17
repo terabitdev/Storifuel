@@ -37,7 +37,7 @@ class PDFService {
               pw.Row(
                 children: [
                   pw.Text(
-                    'Category: ${story.category}',
+                    'Categories: ${story.categories.join(', ')}',
                     style: pw.TextStyle(
                       fontSize: 12,
                       color: PdfColors.grey700,

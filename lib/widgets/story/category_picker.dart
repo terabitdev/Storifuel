@@ -33,8 +33,12 @@ class CategoryPicker extends StatelessWidget {
               children: [
                 Expanded(
                   child: Text(
-                    provider.selectedCategory ?? 'Select Categories',
-                    style: provider.selectedCategory == null
+                    provider.selectedCategories.isEmpty
+                        ? 'Select Categories'
+                        : provider.selectedCategories.length == 1
+                            ? provider.selectedCategories.first
+                            : '${provider.selectedCategories.length} categories selected',
+                    style: provider.selectedCategories.isEmpty
                         ? outfit14w400.copyWith(color: const Color(0xFF626262))
                         : nunito14w500,
                   ),
@@ -72,54 +76,56 @@ class CategoryPicker extends StatelessWidget {
             ChangeNotifierProvider<StoryProvider>.value(value: provider),
             ChangeNotifierProvider<CategoryProvider>(create: (_) => CategoryProvider()),
           ],
-          child: Padding(
-            padding: const EdgeInsets.fromLTRB(20, 12, 20, 24),
-            child: Consumer2<StoryProvider, CategoryProvider>(
-              builder: (context, storyProvider, categoryProvider, _) {
-                return Column(
-                  mainAxisSize: MainAxisSize.min,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Center(
-                      child: Container(
-                        width: 56,
-                        height: 6,
-                        margin: const EdgeInsets.symmetric(vertical: 8),
-                        decoration: BoxDecoration(
-                          color: const Color(0xFFF3F4F6),
-                          borderRadius: BorderRadius.circular(3),
+          child: SingleChildScrollView(
+            child: Padding(
+              padding: const EdgeInsets.fromLTRB(20, 12, 20, 24),
+              child: Consumer2<StoryProvider, CategoryProvider>(
+                builder: (context, storyProvider, categoryProvider, _) {
+                  return Column(
+                    mainAxisSize: MainAxisSize.min,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Center(
+                        child: Container(
+                          width: 56,
+                          height: 6,
+                          margin: const EdgeInsets.symmetric(vertical: 8),
+                          decoration: BoxDecoration(
+                            color: const Color(0xFFF3F4F6),
+                            borderRadius: BorderRadius.circular(3),
+                          ),
                         ),
                       ),
-                    ),
-                    Center(child: Text('Select Categories', style: nunitoSans16w700.copyWith(color: const Color(0xFF0F182E)))),
-                    const SizedBox(height: 20),
-                    if (categoryProvider.categories.isEmpty)
-                      Center(
-                        child: Column(
-                          children: [
-                            Icon(Icons.category_outlined, size: 48, color: Colors.grey.shade400),
-                            const SizedBox(height: 12),
-                            Text(
-                              'No categories found',
-                              style: nunitoSans16w400.copyWith(color: Colors.grey.shade400),
-                            ),
-                          ],
-                        ),
+                      Center(child: Text('Select Categories', style: nunitoSans16w700.copyWith(color: const Color(0xFF0F182E)))),
+                      const SizedBox(height: 20),
+                      if (categoryProvider.categories.isEmpty)
+                        Center(
+                          child: Column(
+                            children: [
+                              Icon(Icons.category_outlined, size: 48, color: Colors.grey.shade400),
+                              const SizedBox(height: 12),
+                              Text(
+                                'No categories found',
+                                style: nunitoSans16w400.copyWith(color: Colors.grey.shade400),
+                              ),
+                            ],
+                          ),
+                        )
+                      else
+                        ...categoryProvider.categories.map((category) => _SelectableRow(
+                              label: category['name'] ?? 'Unknown',
+                              isSelected: storyProvider.isCategorySelected(category['name'] ?? ''),
+                              onTap: () => storyProvider.toggleCategory(category['name'] ?? ''),
+                            )),
+                      const SizedBox(height: 24),
+                      RoundButton(
+                        text: 'Select',
+                        onPressed: () => Navigator.pop(bottomSheetContext),
                       )
-                    else
-                      ...categoryProvider.categories.map((category) => _SelectableRow(
-                            label: category['name'] ?? 'Unknown',
-                            isSelected: storyProvider.selectedCategory == category['name'],
-                            onTap: () => storyProvider.selectCategory(category['name']),
-                          )),
-                    const SizedBox(height: 24),
-                    RoundButton(
-                      text: 'Select',
-                      onPressed: () => Navigator.pop(bottomSheetContext),
-                    )
-                  ],
-                );
-              },
+                    ],
+                  );
+                },
+              ),
             ),
           ),
         );

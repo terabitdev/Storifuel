@@ -17,7 +17,7 @@ class StoryDetailsScreen extends StatefulWidget {
   final String storyId;
   final String image;
   final String title;
-  final String category;
+  final List<String> categories;
   final String timeAgo;
   final List<String> tags;
   final String content;
@@ -27,7 +27,7 @@ class StoryDetailsScreen extends StatefulWidget {
     required this.storyId,
     required this.image,
     required this.title,
-    required this.category,
+    required this.categories,
     required this.timeAgo,
     required this.tags,
     required this.content,
@@ -267,22 +267,40 @@ class _StoryDetailsScreenState extends State<StoryDetailsScreen> {
                               ),
                             ),
                             const SizedBox(height: 8),
-                            Row(
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                Text(
-                                  currentStory.category,
-                                  style: nunito14w500.copyWith(
-                                    color: const Color(0xFF4CAF50),
+                                // Categories display
+                                if (currentStory.categories.isNotEmpty)
+                                  SizedBox(
+                                    height: 30,
+                                    child: ListView.separated(
+                                      scrollDirection: Axis.horizontal,
+                                      itemCount: currentStory.categories.length,
+                                      separatorBuilder: (context, index) => const SizedBox(width: 8),
+                                      itemBuilder: (context, index) {
+                                        return Container(
+                                          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                                          decoration: BoxDecoration(
+                                            color: const Color(0xFF4CAF50).withOpacity(0.1),
+                                            borderRadius: BorderRadius.circular(15),
+                                            border: Border.all(
+                                              color: const Color(0xFF4CAF50),
+                                              width: 1,
+                                            ),
+                                          ),
+                                          child: Text(
+                                            currentStory.categories[index],
+                                            style: nunito14w500.copyWith(
+                                              color: const Color(0xFF4CAF50),
+                                            ),
+                                          ),
+                                        );
+                                      },
+                                    ),
                                   ),
-                                ),
-                                const SizedBox(width: 8),
-                                Text(
-                                  '•',
-                                  style: poppins14w400.copyWith(
-                                    color: Colors.grey,
-                                  ),
-                                ),
-                                const SizedBox(width: 8),
+                                const SizedBox(height: 8),
+                                // Time ago
                                 Text(
                                   widget.timeAgo,
                                   style: poppins14w400.copyWith(

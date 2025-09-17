@@ -4,7 +4,7 @@ class StoryModel {
   final String id;
   final String title;
   final String description;
-  final String category;
+  final List<String> categories;
   final String? imageUrl;
   final String? voiceUrl;
   final bool isFavorited;
@@ -15,7 +15,7 @@ class StoryModel {
     required this.id,
     required this.title,
     required this.description,
-    required this.category,
+    required this.categories,
     this.imageUrl,
     this.voiceUrl,
     this.isFavorited = false,
@@ -29,7 +29,7 @@ class StoryModel {
       'id': id,
       'title': title,
       'description': description,
-      'category': category,
+      'categories': categories,
       'imageUrl': imageUrl,
       'voiceUrl': voiceUrl,
       'isFavorited': isFavorited,
@@ -44,7 +44,7 @@ class StoryModel {
       id: map['id'] ?? '',
       title: map['title'] ?? '',
       description: map['description'] ?? '',
-      category: map['category'] ?? '',
+      categories: List<String>.from(map['categories'] ?? []),
       imageUrl: map['imageUrl'],
       voiceUrl: map['voiceUrl'],
       isFavorited: map['isFavorited'] ?? false,
@@ -58,7 +58,7 @@ class StoryModel {
     String? id,
     String? title,
     String? description,
-    String? category,
+    List<String>? categories,
     String? imageUrl,
     String? voiceUrl,
     bool? isFavorited,
@@ -69,7 +69,7 @@ class StoryModel {
       id: id ?? this.id,
       title: title ?? this.title,
       description: description ?? this.description,
-      category: category ?? this.category,
+      categories: categories ?? this.categories,
       imageUrl: imageUrl ?? this.imageUrl,
       voiceUrl: voiceUrl ?? this.voiceUrl,
       isFavorited: isFavorited ?? this.isFavorited,

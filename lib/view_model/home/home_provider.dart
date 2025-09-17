@@ -137,7 +137,7 @@ void dispose() {
     }
     
     return _allStories.where((story) {
-      return _selectedCategories.contains(story.category);
+      return story.categories.any((category) => _selectedCategories.contains(category));
     }).toList();
   }
 
@@ -151,7 +151,7 @@ void dispose() {
     return filteredStories.where((story) {
       return story.title.toLowerCase().contains(lowercaseQuery) ||
              story.description.toLowerCase().contains(lowercaseQuery) ||
-             story.category.toLowerCase().contains(lowercaseQuery);
+             story.categories.any((category) => category.toLowerCase().contains(lowercaseQuery));
     }).toList();
   }
 
@@ -192,7 +192,7 @@ void dispose() {
 
     // Apply category filter
     if (_selectedCategories.isNotEmpty) {
-      result = result.where((story) => _selectedCategories.contains(story.category)).toList();
+      result = result.where((story) => story.categories.any((category) => _selectedCategories.contains(category))).toList();
     }
 
     // Apply search query
@@ -201,7 +201,7 @@ void dispose() {
       result = result.where((story) {
         return story.title.toLowerCase().contains(lowercaseQuery) ||
                story.description.toLowerCase().contains(lowercaseQuery) ||
-               story.category.toLowerCase().contains(lowercaseQuery);
+               story.categories.any((category) => category.toLowerCase().contains(lowercaseQuery));
       }).toList();
     }
 

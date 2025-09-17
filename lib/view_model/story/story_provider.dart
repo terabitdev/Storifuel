@@ -9,7 +9,7 @@ class StoryProvider extends ChangeNotifier {
   final FocusNode storyFocusNode = FocusNode();
   final StoryService _storyService = StoryService();
 
-  String? selectedCategory;
+  List<String> selectedCategories = [];
   File? selectedImage;
   String? existingImageUrl; // For edit mode - tracks the current image URL
   bool isListening = false;
@@ -20,9 +20,24 @@ class StoryProvider extends ChangeNotifier {
     'Technology',
   ];
 
-  void selectCategory(String? category) {
-    selectedCategory = category;
+  void toggleCategory(String category) {
+    if (selectedCategories.contains(category)) {
+      selectedCategories.remove(category);
+    } else {
+      selectedCategories.add(category);
+    }
     notifyListeners();
+  }
+
+  void selectCategory(String category) {
+    if (!selectedCategories.contains(category)) {
+      selectedCategories.add(category);
+      notifyListeners();
+    }
+  }
+
+  bool isCategorySelected(String category) {
+    return selectedCategories.contains(category);
   }
 
   void setSelectedImage(File? image) {
@@ -49,7 +64,7 @@ class StoryProvider extends ChangeNotifier {
   void clear() {
     titleController.clear();
     storyController.clear();
-    selectedCategory = null;
+    selectedCategories.clear();
     selectedImage = null;
     existingImageUrl = null;
     isListening = false;
@@ -62,12 +77,14 @@ class StoryProvider extends ChangeNotifier {
     if (story != null) {
       titleController.text = story.title;
       storyController.text = story.description;
-      selectedCategory = story.category;
+      selectedCategories = List<String>.from(story.categories);
       existingImageUrl = story.imageUrl;
       
-      // Add category to available categories if it doesn't exist
-      if (story.category.isNotEmpty && !availableCategories.contains(story.category)) {
-        availableCategories.add(story.category);
+      // Add categories to available categories if they don't exist
+      for (String category in story.categories) {
+        if (category.isNotEmpty && !availableCategories.contains(category)) {
+          availableCategories.add(category);
+        }
       }
       
       notifyListeners();
@@ -91,8 +108,8 @@ class StoryProvider extends ChangeNotifier {
     if (storyController.text.trim().isEmpty) {
       return 'Please enter your story';
     }
-    if (selectedCategory == null || selectedCategory!.trim().isEmpty) {
-      return 'Please select a category';
+    if (selectedCategories.isEmpty) {
+      return 'Please select at least one category';
     }
     return null;
   }
@@ -115,7 +132,7 @@ class StoryProvider extends ChangeNotifier {
       await _storyService.createStory(
         title: titleController.text.trim(),
         description: storyController.text.trim(),
-        category: selectedCategory!,
+        categories: selectedCategories,
         imageFile: selectedImage,
       );
 
@@ -153,7 +170,7 @@ class StoryProvider extends ChangeNotifier {
         storyId,
         title: titleController.text.trim(),
         description: storyController.text.trim(),
-        category: selectedCategory!,
+        categories: selectedCategories,
         imageFile: selectedImage, // This will replace the image if a new one is selected
       );
 
