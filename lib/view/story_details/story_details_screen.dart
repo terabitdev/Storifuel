@@ -329,6 +329,7 @@ class _StoryDetailsScreenState extends State<StoryDetailsScreen> {
                 padding: const EdgeInsets.all(16.0),
                 child: ShareButton(onPressed: () => _shareStoryAsPDF(context, currentStory)),
               ),
+              const SizedBox(height: 20),
             ],
           );
         },
