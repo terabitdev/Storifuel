@@ -139,7 +139,10 @@ class HomeScreen extends StatelessWidget {
                         return ListView.builder(
                           itemCount: displayStories.length,
                           itemBuilder: (context, index) {
-                            return StoryCard(story: displayStories[index]);
+                            return Padding(
+                              padding: const EdgeInsets.all(5.0),
+                              child: StoryCard(story: displayStories[index]),
+                            );
                           },
                         );
                       },

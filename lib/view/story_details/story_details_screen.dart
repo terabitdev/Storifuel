@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:storifuel/core/constants/app_images.dart';
 import 'package:storifuel/core/theme/app_fonts.dart';
@@ -195,11 +196,14 @@ class _StoryDetailsScreenState extends State<StoryDetailsScreen> {
                             left: 16,
                             child: GestureDetector(
                               onTap: () => Navigator.pop(context),
-                              child: Image.asset(
-                                AppImages.arrowIcon,
-                                height: 25,
-                                width: 25,
-                              ),
+                              child: 
+                              Icon(Icons.arrow_back)
+                              // Image.asset(
+                              //   AppImages.arrowIcon,
+                              //   height: 25,
+                              //   width: 25,
+                              //   color: Colors.black,
+                              // ),
                             ),
                           ),
                           // Top right icons
