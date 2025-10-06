@@ -45,60 +45,60 @@ class StoryCard extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
           // ✅ Image with Fav Icon overlay
-          Stack(
-            children: [
-              ClipRRect(
-                borderRadius: const BorderRadius.only(
-                  topLeft: Radius.circular(14),
-                  topRight: Radius.circular(14),
-                ),
-                child: story.imageUrl != null
-                    ? Image.network(
-                        story.imageUrl!,
-                        height: 160,
-                        width: double.infinity,
-                        fit: BoxFit.cover,
-                        loadingBuilder: (context, child, loadingProgress) {
-                          if (loadingProgress == null) return child;
-                          return Container(
-                            height: 160,
-                            width: double.infinity,
-                            color: Colors.grey[200],
-                            child: const Center(
-                              child: CircularProgressIndicator(),
-                            ),
-                          );
-                        },
-                        errorBuilder: (context, error, stackTrace) {
-                          return _buildNoImagePlaceholder();
-                        },
-                      )
-                    : _buildNoImagePlaceholder(),
-              ),
-              Positioned(
-                top: 10,
-                left: 10,
-                child: GestureDetector(
-                  onTap: () async {
-                    try {
-                      await StoryService().toggleFavorite(story.id);
-                    } catch (e) {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(content: Text('Error updating favorite: $e')),
-                      );
-                    }
-                  },
-                  child: Center(
-                    child: SvgPicture.asset(
-                      story.isFavorited ? AppImages.favIcon : AppImages.nonFavIcon,
-                      height: 30,
-                      width: 30,
-                    ),
-                  ),
-                ),
-              ),
-            ],
-          ),
+          // Stack(
+          //   children: [
+          //     ClipRRect(
+          //       borderRadius: const BorderRadius.only(
+          //         topLeft: Radius.circular(14),
+          //         topRight: Radius.circular(14),
+          //       ),
+          //       child: story.imageUrl != null
+          //           ? Image.network(
+          //               story.imageUrl!,
+          //               height: 160,
+          //               width: double.infinity,
+          //               fit: BoxFit.cover,
+          //               loadingBuilder: (context, child, loadingProgress) {
+          //                 if (loadingProgress == null) return child;
+          //                 return Container(
+          //                   height: 160,
+          //                   width: double.infinity,
+          //                   color: Colors.grey[200],
+          //                   child: const Center(
+          //                     child: CircularProgressIndicator(),
+          //                   ),
+          //                 );
+          //               },
+          //               errorBuilder: (context, error, stackTrace) {
+          //                 return _buildNoImagePlaceholder();
+          //               },
+          //             )
+          //           : _buildNoImagePlaceholder(),
+          //     ),
+          //     Positioned(
+          //       top: 10,
+          //       left: 10,
+          //       child: GestureDetector(
+          //         onTap: () async {
+          //           try {
+          //             await StoryService().toggleFavorite(story.id);
+          //           } catch (e) {
+          //             ScaffoldMessenger.of(context).showSnackBar(
+          //               SnackBar(content: Text('Error updating favorite: $e')),
+          //             );
+          //           }
+          //         },
+          //         child: Center(
+          //           child: SvgPicture.asset(
+          //             story.isFavorited ? AppImages.favIcon : AppImages.nonFavIcon,
+          //             height: 30,
+          //             width: 30,
+          //           ),
+          //         ),
+          //       ),
+          //     ),
+          //   ],
+          // ),
 
           // ✅ Text Section
           Padding(

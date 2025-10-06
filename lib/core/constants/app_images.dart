@@ -11,8 +11,8 @@ class AppImages {
   static const String homeColorIcon = 'assets/icons/home-fill.svg';
   static const String categoryIcon = 'assets/icons/category.svg';
   static const String categoryColorIcon = 'assets/icons/category-fill.svg';
-  static const String favouriteIcon = 'assets/icons/heart.svg';
-  static const String favouriteColorIcon = 'assets/icons/heart-fill.svg';
+  static const String favouriteIcon = 'assets/icons/heart1.svg';
+  static const String favouriteColorIcon = 'assets/icons/heart-fill1.svg';
   static const String profileIcon = 'assets/icons/profile.svg';
   static const String profileColorIcon = 'assets/icons/profile-fill.svg';
   static const String addIcon = 'assets/icons/Add.svg';

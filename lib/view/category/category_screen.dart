@@ -6,6 +6,8 @@ import 'package:storifuel/core/constants/app_images.dart';
 import 'package:storifuel/core/theme/app_fonts.dart';
 import 'package:storifuel/core/utils/toast.dart';
 import 'package:storifuel/view_model/category/category_provider.dart';
+import 'package:storifuel/view_model/dashboard/dashboard_provider.dart';
+import 'package:storifuel/view_model/home/home_provider.dart';
 import 'package:storifuel/widgets/category/add_category_sheet.dart';
 import 'package:storifuel/widgets/category/category_card.dart';
 import 'package:storifuel/widgets/category/edit_category_bottom_sheet.dart';
@@ -232,6 +234,17 @@ class _CategoryScreenState extends State<CategoryScreen> {
                           final category = categoryProvider.categories[index];
                           return CategoryCard(
                             title: category['name'] ?? 'Unknown',
+                            onTap: () {
+                              final navBarProvider = context.read<NavBarProvider>();
+                              final homeProvider = context.read<HomeProvider>();
+
+                              // Clear existing filters and set the selected category
+                              homeProvider.clearAllFilters();
+                              homeProvider.toggleCategory(category['name'] ?? '');
+
+                              // Navigate to home screen (index 0)
+                              navBarProvider.updateSelectedIndex(0);
+                            },
                             onEdit: () => _showEditCategoryBottomSheet(
                               category['id'],
                               category['name'] ?? '',

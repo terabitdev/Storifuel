@@ -33,7 +33,7 @@ class FavouriteScreen extends StatelessWidget {
             children: [
               Center(child: Image.asset(AppImages.logo1, width: 118, height: 32)),
               const SizedBox(height: 20),
-              Text("Favorites", style: poppins18w600),
+              Text("Library", style: poppins18w600),
               const SizedBox(height: 12),
               Expanded(
                 child: StreamBuilder<List<StoryModel>>(
@@ -54,6 +54,11 @@ class FavouriteScreen extends StatelessWidget {
                     if (favoritedStories.isEmpty) {
                       return _buildEmptyState();
                     }
+
+                    // ✅ Sort alphabetically by title (A to Z)
+      favoritedStories.sort(
+        (a, b) => a.title.toLowerCase().compareTo(b.title.toLowerCase()),
+      );
 
                     return ListView.builder(
                       itemCount: favoritedStories.length,

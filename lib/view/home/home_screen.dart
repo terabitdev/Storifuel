@@ -65,8 +65,31 @@ class HomeScreen extends StatelessWidget {
                   );
                 },
               ),
-              const SizedBox(height: 20),
-              Text("Recently", style: poppins18w600),
+              const SizedBox(height: 12),
+              Consumer<HomeProvider>(
+                builder: (context, provider, _) {
+                  if (provider.selectedCategories.isEmpty) {
+                    return const SizedBox.shrink();
+                  }
+                  return Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Wrap(
+                        spacing: 8,
+                        runSpacing: 8,
+                        children: provider.selectedCategories.map((category) {
+                          return _FilterChip(
+                            label: category,
+                            onRemove: () => provider.toggleCategory(category),
+                          );
+                        }).toList(),
+                      ),
+                      const SizedBox(height: 8),
+                    ],
+                  );
+                },
+              ),
+              Text("Recent Entries", style: poppins18w600),
               const SizedBox(height: 12),
               Expanded(
                 child: Consumer<HomeProvider>(
@@ -298,6 +321,46 @@ class _FilterCheckIcon extends StatelessWidget {
       child: isSelected
           ? const Icon(Icons.check, size: 16, color: Colors.white)
           : null,
+    );
+  }
+}
+
+class _FilterChip extends StatelessWidget {
+  final String label;
+  final VoidCallback onRemove;
+
+  const _FilterChip({
+    required this.label,
+    required this.onRemove,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+      decoration: BoxDecoration(
+        color: secondaryColor.withOpacity(0.1),
+        borderRadius: BorderRadius.circular(20),
+        border: Border.all(color: secondaryColor, width: 1),
+      ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Text(
+            label,
+            style: nunito12w400.copyWith(color: secondaryColor),
+          ),
+          const SizedBox(width: 6),
+          GestureDetector(
+            onTap: onRemove,
+            child: Icon(
+              Icons.close,
+              size: 16,
+              color: secondaryColor,
+            ),
+          ),
+        ],
+      ),
     );
   }
 }
