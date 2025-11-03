@@ -1,4 +1,4 @@
-package com.10emedia.storifuel
+package com.company.storifuel
 
 import io.flutter.embedding.android.FlutterActivity
 
