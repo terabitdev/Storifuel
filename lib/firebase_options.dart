@@ -17,10 +17,7 @@ import 'package:flutter/foundation.dart'
 class DefaultFirebaseOptions {
   static FirebaseOptions get currentPlatform {
     if (kIsWeb) {
-      throw UnsupportedError(
-        'DefaultFirebaseOptions have not been configured for web - '
-        'you can reconfigure this by running the FlutterFire CLI again.',
-      );
+      return web;
     }
     switch (defaultTargetPlatform) {
       case TargetPlatform.android:
@@ -33,10 +30,7 @@ class DefaultFirebaseOptions {
           'you can reconfigure this by running the FlutterFire CLI again.',
         );
       case TargetPlatform.windows:
-        throw UnsupportedError(
-          'DefaultFirebaseOptions have not been configured for windows - '
-          'you can reconfigure this by running the FlutterFire CLI again.',
-        );
+        return windows;
       case TargetPlatform.linux:
         throw UnsupportedError(
           'DefaultFirebaseOptions have not been configured for linux - '
@@ -65,4 +59,23 @@ class DefaultFirebaseOptions {
     storageBucket: 'storifuel-app.firebasestorage.app',
     iosBundleId: 'com.example.storifuel',
   );
+
+  static const FirebaseOptions web = FirebaseOptions(
+    apiKey: 'AIzaSyCX1OfNpMeW04c01ttOaD5_zx8fCkSpmnk',
+    appId: '1:706189234663:web:682428eabbfc763a1c6d42',
+    messagingSenderId: '706189234663',
+    projectId: 'storifuel-app',
+    authDomain: 'storifuel-app.firebaseapp.com',
+    storageBucket: 'storifuel-app.firebasestorage.app',
+  );
+
+  static const FirebaseOptions windows = FirebaseOptions(
+    apiKey: 'AIzaSyCX1OfNpMeW04c01ttOaD5_zx8fCkSpmnk',
+    appId: '1:706189234663:web:c4e9fd69980f2bc11c6d42',
+    messagingSenderId: '706189234663',
+    projectId: 'storifuel-app',
+    authDomain: 'storifuel-app.firebaseapp.com',
+    storageBucket: 'storifuel-app.firebasestorage.app',
+  );
+
 }
