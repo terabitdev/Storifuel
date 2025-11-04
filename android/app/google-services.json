@@ -7,6 +7,25 @@
   "client": [
     {
       "client_info": {
+        "mobilesdk_app_id": "1:706189234663:android:8a676a0b27c913bc1c6d42",
+        "android_client_info": {
+          "package_name": "com.company.storifuel"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD3mxkKWGeDqyEOA7MAmZm2q2I6OJ6Os0M"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
         "mobilesdk_app_id": "1:706189234663:android:0e468385d9a4e0571c6d42",
         "android_client_info": {
           "package_name": "com.example.storifuel"

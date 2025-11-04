@@ -25,10 +25,7 @@ class DefaultFirebaseOptions {
       case TargetPlatform.iOS:
         return ios;
       case TargetPlatform.macOS:
-        throw UnsupportedError(
-          'DefaultFirebaseOptions have not been configured for macos - '
-          'you can reconfigure this by running the FlutterFire CLI again.',
-        );
+        return macos;
       case TargetPlatform.windows:
         return windows;
       case TargetPlatform.linux:
@@ -45,7 +42,7 @@ class DefaultFirebaseOptions {
 
   static const FirebaseOptions android = FirebaseOptions(
     apiKey: 'AIzaSyD3mxkKWGeDqyEOA7MAmZm2q2I6OJ6Os0M',
-    appId: '1:706189234663:android:0e468385d9a4e0571c6d42',
+    appId: '1:706189234663:android:8a676a0b27c913bc1c6d42',
     messagingSenderId: '706189234663',
     projectId: 'storifuel-app',
     storageBucket: 'storifuel-app.firebasestorage.app',
@@ -53,11 +50,11 @@ class DefaultFirebaseOptions {
 
   static const FirebaseOptions ios = FirebaseOptions(
     apiKey: 'AIzaSyDc9-jVxPg6qaMYhl-jpxCVfWfDlw_BAJs',
-    appId: '1:706189234663:ios:14757bf91f2941d81c6d42',
+    appId: '1:706189234663:ios:3ec1f2c3cdf502621c6d42',
     messagingSenderId: '706189234663',
     projectId: 'storifuel-app',
     storageBucket: 'storifuel-app.firebasestorage.app',
-    iosBundleId: 'com.example.storifuel',
+    iosBundleId: 'com.company.storifuel',
   );
 
   static const FirebaseOptions web = FirebaseOptions(
@@ -76,6 +73,15 @@ class DefaultFirebaseOptions {
     projectId: 'storifuel-app',
     authDomain: 'storifuel-app.firebaseapp.com',
     storageBucket: 'storifuel-app.firebasestorage.app',
+  );
+
+  static const FirebaseOptions macos = FirebaseOptions(
+    apiKey: 'AIzaSyDc9-jVxPg6qaMYhl-jpxCVfWfDlw_BAJs',
+    appId: '1:706189234663:ios:14757bf91f2941d81c6d42',
+    messagingSenderId: '706189234663',
+    projectId: 'storifuel-app',
+    storageBucket: 'storifuel-app.firebasestorage.app',
+    iosBundleId: 'com.example.storifuel',
   );
 
 }
