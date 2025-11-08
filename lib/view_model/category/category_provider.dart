@@ -15,6 +15,15 @@ class CategoryProvider extends ChangeNotifier {
   String? get errorMessage => _errorMessage;
   bool get hasCategories => _categories.isNotEmpty;
 
+  // Helper method to sort categories alphabetically
+  void _sortCategories() {
+    _categories.sort((a, b) {
+      final nameA = (a['name'] ?? '').toString().toLowerCase();
+      final nameB = (b['name'] ?? '').toString().toLowerCase();
+      return nameA.compareTo(nameB);
+    });
+  }
+
   CategoryProvider() {
     _initializeCategories();
   }
@@ -23,15 +32,17 @@ class CategoryProvider extends ChangeNotifier {
     // First load categories synchronously to avoid empty state
     try {
       _categories = await _categoryService.getCategoriesOnce();
+      _sortCategories();
       notifyListeners();
     } catch (e) {
       _errorMessage = 'Failed to load categories: $e';
     }
-    
+
     // Then listen to real-time updates
     _categoriesSubscription = _categoryService.getCategories().listen(
       (categories) {
         _categories = categories;
+        _sortCategories();
         _isLoading = false;
         _errorMessage = null;
         notifyListeners();
@@ -138,9 +149,10 @@ class CategoryProvider extends ChangeNotifier {
     try {
       _setLoading(true);
       _setError(null);
-      
+
       final categories = await _categoryService.getCategoriesOnce();
       _categories = categories;
+      _sortCategories();
     } catch (e) {
       _setError('Failed to refresh categories: $e');
     } finally {

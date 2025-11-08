@@ -40,6 +40,7 @@ class HomeProvider extends ChangeNotifier {
     final categories = await _categoryService.getCategoriesOnce();
     if (!_disposed) {
       _availableCategories = categories.map((cat) => cat['name'] as String).toList();
+      _availableCategories.sort((a, b) => a.toLowerCase().compareTo(b.toLowerCase()));
       _filterCategoriesBySearch();
       notifyListeners();
     }
@@ -52,6 +53,7 @@ class HomeProvider extends ChangeNotifier {
     (categories) {
       if (!_disposed) {
         _availableCategories = categories.map((cat) => cat['name'] as String).toList();
+        _availableCategories.sort((a, b) => a.toLowerCase().compareTo(b.toLowerCase()));
         _filterCategoriesBySearch();
         notifyListeners();
       }
@@ -183,6 +185,7 @@ void dispose() {
       _filteredCategories = _availableCategories
           .where((category) => category.toLowerCase().contains(lowercaseQuery))
           .toList();
+      _filteredCategories.sort((a, b) => a.toLowerCase().compareTo(b.toLowerCase()));
     }
   }
 
